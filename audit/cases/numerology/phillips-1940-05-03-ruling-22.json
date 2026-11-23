@@ -1,0 +1,14 @@
+{
+  "source": {
+    "id": "phillips-complete-numerology",
+    "locator": "Hay House 2005, pp. 82, 179: 5/3/1940 = 22/4; p. 179 (search excerpt): Ruling 22/4 reaches the first peak at age 32; Google Books preview, id xogGqJzowKYC"
+  },
+  "input": {
+    "birth_date": "1940-05-03",
+    "life_path_rule": "phillips"
+  },
+  "expect": {
+    "life_path.value": 22,
+    "pinnacles.0.end_age": 32
+  }
+}

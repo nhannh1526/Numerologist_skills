@@ -1,0 +1,12 @@
+{
+  "source": {
+    "id": "phillips-complete-numerology",
+    "locator": "Hay House 2005, p. 63: Arrow of Emotional Balance (example birth 1980-05-23); Google Books preview, id xogGqJzowKYC; read from a search excerpt"
+  },
+  "input": {
+    "birth_date": "1980-05-23"
+  },
+  "expect": {
+    "birth_chart.arrows.4.status": "full"
+  }
+}

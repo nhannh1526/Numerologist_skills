@@ -8,7 +8,8 @@ description: >
   性格、事业、婚姻、财运等，且明确要求或暗示使用紫微斗数体系的场景。包含完整的
   排盘、宫位解读、四化分析、大限流年推演等能力。正式排盘调用脚本完成固定计算，
   模型只负责访谈与解读。
-compatibility: Requires Python 3.10+ and lunar_python; run scripts/ziwei_cli.py for all fixed calculations.
+  即使问题很短（只问命宫或某颗星），也必须用本技能并运行脚本，不要心算。
+compatibility: Requires Python 3.11+, lunar_python, and tzdata; run scripts/ziwei_cli.py for all fixed calculations.
 ---
 
 # 紫微斗数大师技能
@@ -21,6 +22,7 @@ Read:
 - `references/stars.md`
 - `references/sihua.md`
 - `references/patterns.md`
+- `references/thuat-ngu-vi.md`、`references/thuat-ngu-chung.md`（越南语用户）
 
 ## 核心规则
 
@@ -29,6 +31,7 @@ Read:
 - 命盘展示的是倾向、结构、课题与机会，不是绝对命定。
 - 不用恐吓式、宿命式表述，不说“注定如此”“无法改变”。
 - 健康、法律、财务等问题只能做命盘角度的结构提醒，不能替代现实专业意见。
+- `references/` 中各节注明了古籍出处；标「未核对古籍」或「部分」的内容是现代整理，向用户转述时要说明这是现代说法、不是古籍原文，不要说成古法定论。
 
 ### 逻辑优先级
 
@@ -112,20 +115,20 @@ Read:
 **前置：确认依赖已安装**
 
 ```bash
-pip install -r ziwei-doushu/scripts/requirements.txt
+python3 -m pip install -r "<skill_dir>/scripts/requirements.txt"
 ```
 
 **执行脚本**
 
-脚本路径以仓库根目录为基准：
+脚本路径以本 skill 目录为基准，记为 `<skill_dir>`（本 SKILL.md 所在目录；作为 Claude Code 插件安装时，即加载本 skill 时给出的 base directory）：
 
 ```bash
-python "ziwei-doushu/scripts/ziwei_cli.py" \
+python3 "<skill_dir>/scripts/ziwei_cli.py" \
   --input "tmp/ziwei_input.json" \
   --output "tmp/ziwei_output.json"
 ```
 
-先把输入 JSON 写入 `tmp/ziwei_input.json`，再执行上述命令，读取 `tmp/ziwei_output.json`。`tmp/` 也可以替换成任意可写的临时目录。
+**写入与运行（必须照做）**：用 Write 工具在当前工作目录下创建 `tmp/ziwei_input.json`（Write 需要绝对路径，即 `<当前工作目录>/tmp/ziwei_input.json`；下面命令里的相对路径 `tmp/...` 指向同一文件）；不要用 shell heredoc、`echo >`、`mkdir && ...` 等组合命令写文件。然后单独运行上面那一条 `python3` 命令（不加 `cd`、`&&` 或管道），再用 Read 读取输出文件。这样用户只需授权一条 python3 命令；命令被拒绝时，告诉用户需要允许运行该 python 脚本，不要改为手算。命令用 `python3`；只有 `python3` 不存在（如部分 Windows）时才改用 `python`。`python3` 能运行脚本即说明依赖已装好，不要再去安装。
 
 输入 JSON：
 
@@ -137,15 +140,23 @@ python "ziwei-doushu/scripts/ziwei_cli.py" \
   "gender": "男|女",
   "late_zi_rule": "next_day|same_day",
   "leap_month_rule": "current|next|split_15",
-  "query_year": 2026
+  "sihua_rule": "zuofu|quanshu",
+  "query_year": 2026,
+  "true_solar_time": false,
+  "calendar_locale": "cn|vn",
+  "location": {"longitude": 116.4, "timezone": "Asia/Shanghai"}
 }
 ```
 
 - `birth_time`、`gender` 必填；出生时间缺失或性别缺失时脚本直接报错，不代填。
 - `calendar_type=lunar` 时 `birth_time` 写农历年月日，闰月出生同时传 `"is_leap_month": true`。
 - `late_zi_rule` 默认 `next_day`（23:00 起算次日子时）；只有用户明确沿用不换日的口径时才传 `same_day`。
-- `leap_month_rule` 只在出生于闰月时起作用。不传时默认 `split_15`（闰月十五日及以前按本月，十六日起按下月）；用户已有既定口径时改传 `current`（整月按本月）或 `next`（整月按下月）。输出里 `normalized_input.leap_month_rule_source` 标明是默认（`default`）还是指定（`explicit`），给用户讲口径时照实说明用了哪种算法。
+- `leap_month_rule` 只在出生于闰月时起作用。不传时默认 `split_15`（闰月十五日及以前按本月，十六日起按下月）；用户已有既定口径时改传 `current`（整月按本月）或 `next`（整月按下月）。输出里 `normalized_input.leap_month_rule_source` 标明是默认（`default`）还是指定（`explicit`），给用户讲口径时照实说明用了哪种算法。《紫微斗數全書》卷二原文是整月按下月（`next`），`split_15` 是现代软件常用口径。
+- `sihua_rule` 只影响壬干化科：默认 `zuofu`（左辅化科，现代通行，与 iztro 一致）；用户按《紫微斗數全書》或老师用「壬梁紫府武」时传 `quanshu`（天府化科）。讲到壬年、壬干大限或流年的化科时说明用了哪种。
+- `calendar_locale` 默认 `cn`（中国农历）；越南用户传 `vn`，农历输入与输出的农历日期按越南阴历（1967 年十一月即 1967-12 起按东七区）。越南与中国阴历月界不同时，命宫、身宫与星曜位置会不同。
 - `query_year` 可选，填要看的农历年份，脚本会算出该年虚岁、所在大限及大限四化、流年命宫及流年四化。
+- `true_solar_time` 可选，默认不校正。用户要求真太阳时（或出生地远离时区中央经线，如新疆、西藏）时传 `true`，并必须给出生地经度 `location.longitude`（东经为正）；时区 `location.timezone` 默认 `Asia/Shanghai`。脚本按时区（含夏令时）换回 UTC，再加经度时差与均时差，明细见输出 `normalized_input.true_solar_time`。
+- 出生时间处于 `location.timezone`（默认 `Asia/Shanghai`）的夏令时期间（如中国 1986-1991 年夏季），或落在拨钟空档/重叠时，输出 `warnings` 会提示；向用户确认报的是钟表时间还是标准时间，必要时开启 `true_solar_time` 重排。
 - 时辰不确定时，按候选时辰分别跑脚本，对比差异盘，不要硬定。
 - 输出 `warnings` 提示出生时间靠近时辰交界、子时换日、闰月口径时，要把这些写进给用户的口径说明。
 
@@ -304,6 +315,13 @@ python "ziwei-doushu/scripts/ziwei_cli.py" \
 - 凶象转译成风险、课题、代价、成本、需要修炼之处。
 - 如果盘面存在口径争议，要明确指出“这里有两种常见口径，我当前按哪一种说”。
 
+### 越南语用户
+
+- 用户用越南语提问时，全程用越南语回答；术语用 `references/thuat-ngu-vi.md` 与 `references/thuat-ngu-chung.md` 的汉越音（如 日主 → Nhật chủ），首次出现时括注汉字。
+- 用户提到的阴历日期默认是越南阴历：输入 JSON 传 `"calendar_locale": "vn"`；用户明确说是中国农历或来自中国软件时用 `cn`。两者在 1968 年后个别月份相差一天，偶有整月（见 `thuat-ngu-chung.md`）。
+- 越南阴历与中国农历不同时（如 1985 年越南春节是 1 月 21 日，中国是 2 月 20 日），脚本会在 `warnings` 列出两边日期。以脚本结果为准，不要拿中国农历的春节日期去怀疑或“纠正”它，也不要因此改为手算。
+- 输出 `warnings` 提示 1968 年至 1975-06-13 越南南方历法时，先问用户出生在南方还是北方。
+
 ## 特殊情况
 
 - 时辰不准：给差异盘思路，不装作精确。
@@ -313,6 +331,8 @@ python "ziwei-doushu/scripts/ziwei_cli.py" \
 
 ## 结尾提醒
 
-每次完整解盘后附上：
+凡是给出排盘结果或任何解读的回复（包括只排盘、只回答一部分、初步判断、等待用户补充信息时已给出的部分结果），都在结尾附上下面这段，不要省略；用户用越南语时附越南语译文：
 
 > 温馨提示：紫微斗数属于中华传统文化中的命理系统，本解读用于提供自我观察、关系理解与人生规划的参考视角。命盘呈现的是结构与倾向，不是不可改变的命令；后天选择、环境与持续行动同样重要。重大决策仍需结合现实条件，理性判断。
+
+> Lưu ý: Tử Vi Đẩu Số là hệ thống mệnh lý truyền thống; phần luận giải này chỉ để tham khảo khi tự nhìn nhận bản thân và lên kế hoạch. Lá số cho thấy cấu trúc và khuynh hướng, không phải điều định sẵn không đổi được; lựa chọn, hoàn cảnh và nỗ lực về sau cũng quan trọng. Quyết định lớn vẫn cần dựa vào điều kiện thực tế.

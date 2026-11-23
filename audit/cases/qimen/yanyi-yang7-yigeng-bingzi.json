@@ -1,0 +1,26 @@
+{
+  "source": {
+    "id": "dunjia-yanyi",
+    "locator": "zh.wikisource 遁甲演義 (四庫全書本)/卷2 (section 人遁): 假如陽遁七局乙庚日丙子時天任為直符加時干六丙於五宫生門為直使加臨一宫即休門與六丁星竒下臨直符前二六宫太隂中也. Reconstructed date and time with the same ju and hour; the book says 五宫, the code places the zhifu in palace 2 (center lodges with Kun)"
+  },
+  "input": {
+    "time_input": "2024-03-07 00:30",
+    "location": {
+      "country": "cn"
+    }
+  },
+  "expect": {
+    "chart.dun_type": "阳遁",
+    "chart.ju_number": 7,
+    "chart.zhifu.star": "天任",
+    "chart.zhifu.palace": 2,
+    "chart.zhishi.door": "生门",
+    "chart.zhishi.palace": 1,
+    "chart.palaces.5.palace": 6,
+    "chart.palaces.5.door": "休门",
+    "chart.palaces.5.sky_stems": [
+      "丁"
+    ],
+    "chart.palaces.5.god": "太阴"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "source": {
+    "id": "phillips-complete-numerology",
+    "locator": "Hay House 2005, p. 58: Arrow of the Enquirer (formerly Arrow of Scepticism) (example birth 1981-02-20); Google Books preview, id xogGqJzowKYC"
+  },
+  "input": {
+    "birth_date": "1981-02-20"
+  },
+  "expect": {
+    "birth_chart.arrows.7.status": "empty"
+  }
+}

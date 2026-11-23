@@ -1,0 +1,13 @@
+{
+  "source": {
+    "id": "phillips-complete-numerology",
+    "locator": "Hay House 2005, pp. 82–83: 5/5/1949 = 33/6, Ruling Number 6; p. 83: 33 is not a master number; Google Books preview, id xogGqJzowKYC"
+  },
+  "input": {
+    "birth_date": "1949-05-05",
+    "life_path_rule": "phillips"
+  },
+  "expect": {
+    "life_path.value": 6
+  }
+}

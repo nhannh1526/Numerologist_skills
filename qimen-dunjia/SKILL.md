@@ -4,6 +4,7 @@ description: >
   奇门遁甲排盘、解盘、择时、方位判断与理论教学技能。用户明确提到奇门遁甲、时家奇门、
   奇门排盘、奇门解盘、奇门择吉、方位选择、趋吉避凶，或要求“用奇门”分析一件具体事情时，
   必须使用本技能。正式排盘前先做结构化访谈，再调用脚本完成固定计算，最后再做解读与建议。
+  即使问题很短（只问某个时辰的局），也必须用本技能并运行脚本，不要心算。
 compatibility: Requires Python 3.11+, lunar_python, and tzdata; run scripts/qimen_cli.py for all fixed calculations.
 ---
 
@@ -40,6 +41,7 @@ compatibility: Requires Python 3.11+, lunar_python, and tzdata; run scripts/qime
 - 不展示完整推理链，只展示关键依据和必要计算结果。
 - 重大决策、疾病、法律、投资等高风险主题，必须附现实建议。
 - 不用恐吓式语言，不说“必败”“必死”“无救”。
+- `references/` 中各节注明了古籍出处；标「未核对古籍」或「部分」的内容是现代整理，向用户转述时要说明这是现代说法、不是古籍原文，不要说成古法定论。
 
 ## 默认规则
 
@@ -48,7 +50,7 @@ compatibility: Requires Python 3.11+, lunar_python, and tzdata; run scripts/qime
 - 体系：时家转盘奇门
 - 默认时区：`Asia/Shanghai`
 - 默认适用区域：中国大陆优先
-- 定局：置闰法工程化实现
+- 定局：拆补法（按起局时刻所处节气取局，现代软件通行）。《奇门遁甲统宗》《遁甲演义》用超神接气置闰，符头与节气错开的日子局数可能不同；用户的软件或老师用置闰法时要说明差异。
 - 中宫/寄宫：中宫相关判断一律寄坤处理
 
 详细规则见 `references/ruleset-mainline.md`。
@@ -108,20 +110,20 @@ compatibility: Requires Python 3.11+, lunar_python, and tzdata; run scripts/qime
 执行正式排盘前先检查依赖。如果未安装，先运行：
 
 ```bash
-pip install "lunar_python>=1.4.8,<2" "tzdata>=2024.1"
+python3 -m pip install -r "<skill_dir>/scripts/requirements.txt"
 ```
 
 **执行脚本**
 
-脚本路径以仓库根目录为基准：
+脚本路径以本 skill 目录为基准，记为 `<skill_dir>`（本 SKILL.md 所在目录；作为 Claude Code 插件安装时，即加载本 skill 时给出的 base directory）：
 
 ```bash
-python "qimen-dunjia/scripts/qimen_cli.py" \
+python3 "<skill_dir>/scripts/qimen_cli.py" \
   --input "tmp/qimen_input.json" \
   --output "tmp/qimen_output.json"
 ```
 
-先把输入 JSON 写入 `tmp/qimen_input.json`，再执行上述命令，读取 `tmp/qimen_output.json`。`tmp/` 也可以替换成任意可写的临时目录。
+**写入与运行（必须照做）**：用 Write 工具在当前工作目录下创建 `tmp/qimen_input.json`（Write 需要绝对路径，即 `<当前工作目录>/tmp/qimen_input.json`；下面命令里的相对路径 `tmp/...` 指向同一文件）；不要用 shell heredoc、`echo >`、`mkdir && ...` 等组合命令写文件。然后单独运行上面那一条 `python3` 命令（不加 `cd`、`&&` 或管道），再用 Read 读取输出文件。这样用户只需授权一条 python3 命令；命令被拒绝时，告诉用户需要允许运行该 python 脚本，不要改为手算。命令用 `python3`；只有 `python3` 不存在（如部分 Windows）时才改用 `python`。`python3` 能运行脚本即说明依赖已装好，不要再去安装。
 
 输入 JSON 最低字段：
 
@@ -134,11 +136,17 @@ python "qimen-dunjia/scripts/qimen_cli.py" \
   "location": {
     "country": "",
     "city": "",
-    "timezone": ""
+    "timezone": "",
+    "longitude": null
   },
+  "true_solar_time": false,
+  "calendar_locale": "cn|vn",
   "ruleset": "mainline-cn-v1"
 }
 ```
+
+- `calendar_locale` 默认 `cn`；越南用户用阴历报时间时传 `vn`。只影响农历输入换算与输出的农历日期，起局按节气与干支，不受影响。
+- `true_solar_time` 可选，默认按所给时区的钟表时间起局。用户要求按真太阳时起局时传 `true`，并给 `location.longitude`（东经为正）；明细见输出 `normalized_input.true_solar_time`，口径见 `ruleset.time_rule`。
 
 使用要求：
 
@@ -299,6 +307,12 @@ python "qimen-dunjia/scripts/qimen_cli.py" \
 - 不展示完整推理链，只展示用户看得懂的关键依据。
 - 结论要明确，但语气保持平和。
 
+### 越南语用户
+
+- 用户用越南语提问时，全程用越南语回答；术语用 `references/thuat-ngu-vi.md` 与 `references/thuat-ngu-chung.md` 的汉越音（如 日主 → Nhật chủ），首次出现时括注汉字。
+- 用户提到的阴历日期默认是越南阴历：输入 JSON 传 `"calendar_locale": "vn"`；用户明确说是中国农历或来自中国软件时用 `cn`。两者在 1968 年后个别月份相差一天，偶有整月（见 `thuat-ngu-chung.md`）。
+- 越南阴历与中国农历不同时（如 1985 年越南春节是 1 月 21 日，中国是 2 月 20 日），脚本会在 `warnings` 列出两边日期。以脚本结果为准，不要拿中国农历的春节日期去怀疑或“纠正”它，也不要因此改为手算。
+
 ## 特殊处理
 
 ### 用户只说“现在，帮我看看”
@@ -328,6 +342,7 @@ python "qimen-dunjia/scripts/qimen_cli.py" \
 - `references/yongshen.md`：取用神顺序和事项映射
 - `references/geju.md`：格局与常见组合的简明解释
 - `references/examples.md`：示例输出
+- `references/thuat-ngu-vi.md`、`references/thuat-ngu-chung.md`：越南语术语对照与越南阴历说明
 
 ## 禁止事项
 

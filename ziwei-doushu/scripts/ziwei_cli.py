@@ -7,15 +7,25 @@ references/stars.md 中的表与口诀；口径说明见 references/calculation.
 """
 from __future__ import annotations
 
-import argparse
-import json
 import math
 from dataclasses import dataclass
-from datetime import date, timedelta
-from pathlib import Path
+from datetime import date, datetime, timedelta
 from typing import Any
 
-from lunar_python import Lunar, LunarYear, Solar
+from calendar_core import (
+    CALENDAR_LOCALES,
+    apply_true_solar_time,
+    calendar_locale_warnings,
+    lunar_to_solar,
+    parse_calendar_locale,
+    solar_to_lunar,
+    clock_warnings,
+    hour_boundary_warning,
+    parse_datetime_string,
+    parse_gender,
+    run_cli,
+    validate_leap_month,
+)
 
 DEFAULT_RULESET = "ziwei-sanhe-v1"
 
@@ -86,6 +96,13 @@ SIHUA = {
     "壬": ("天梁", "紫微", "左辅", "武曲"),
     "癸": ("破军", "巨门", "太阴", "贪狼"),
 }
+# 壬干化科异说：默认左辅（iztro 与多数现代书）；《紫微斗數全書》卷二「壬梁紫府武」作天府
+DEFAULT_SIHUA_RULE = "zuofu"
+SIHUA_RULES = {"zuofu": SIHUA, "quanshu": {**SIHUA, "壬": ("天梁", "紫微", "天府", "武曲")}}
+SIHUA_RULE_TEXT = {
+    "zuofu": "壬干化科取左辅（现代通行，与 iztro 一致）",
+    "quanshu": "壬干化科取天府（《紫微斗數全書》卷二「壬梁紫府武」）",
+}
 
 # stars.md 十四主星庙旺利平陷表（《紫微斗數全書》卷二总表），列序 子→亥
 BRIGHTNESS = {
@@ -130,19 +147,23 @@ LATE_ZI_RULES = {
     "same_day": "23:00 起取子时，但农历日期仍按当天（沿用用户既定口径时使用）",
 }
 
-GENDER_ALIASES = {"男": "男", "male": "男", "m": "男", "女": "女", "female": "女", "f": "女"}
+MISSING_TIME = "缺少出生时间：紫微排盘需要出生时辰，请先向用户确认"
 
 
 @dataclass
 class BirthInfo:
     calendar_type: str
-    solar_date: date  # 民用公历日期（未做子时换日）
+    solar_date: date  # 排盘用公历日期（已做真太阳时校正，未做子时换日）
     hour: int
     minute: int
+    civil_datetime: datetime  # 用户给出的民用时间
+    true_solar_time: dict[str, Any] | None
     gender: str
     leap_month_rule: str
     leap_month_rule_source: str  # "default" 或 "explicit"
     late_zi_rule: str
+    sihua_rule: str
+    calendar_locale: str
     original_input: Any
     warnings: list[str]
 
@@ -155,47 +176,17 @@ def wrap(index: int) -> int:
     return index % 12
 
 
-def parse_datetime_string(value: str) -> dict[str, int]:
-    normalized = value.strip().replace("T", " ").replace("/", "-").replace("年", "-").replace("月", "-").replace("日", " ")
-    normalized = normalized.replace("时", ":").replace("點", ":").replace("点", ":").replace("分", "").replace("秒", "")
-    parts = normalized.split()
-    if not parts:
-        raise ValueError("birth_time 不能为空")
-    date_bits = [int(bit) for bit in parts[0].split("-") if bit]
-    if len(date_bits) != 3:
-        raise ValueError("日期格式需为 YYYY-MM-DD")
-    if len(parts) < 2:
-        raise ValueError("缺少出生时间：紫微排盘需要出生时辰，请先向用户确认")
-    time_bits = [int(bit) for bit in parts[1].split(":") if bit]
-    if not time_bits:
-        raise ValueError("出生时间格式需为 HH:MM")
-    return {
-        "year": date_bits[0],
-        "month": date_bits[1],
-        "day": date_bits[2],
-        "hour": time_bits[0],
-        "minute": time_bits[1] if len(time_bits) > 1 else 0,
-    }
-
-
-def lunar_to_solar_date(year: int, month: int, day: int, is_leap: bool) -> date:
-    if is_leap and LunarYear.fromYear(year).getLeapMonth() != month:
-        raise ValueError(f"农历 {year} 年没有闰{month}月")
-    lunar = Lunar.fromYmd(year, -month if is_leap else month, day)
-    solar = lunar.getSolar()
-    return date(solar.getYear(), solar.getMonth(), solar.getDay())
-
-
 def normalize_input(payload: dict[str, Any]) -> BirthInfo:
     warnings: list[str] = []
     calendar_type = str(payload.get("calendar_type") or "solar").strip().lower()
+    locale = parse_calendar_locale(payload)
     raw_input = payload.get("birth_time")
     if raw_input in (None, ""):
         raise ValueError("缺少 birth_time")
 
     if isinstance(raw_input, dict):
         if "hour" not in raw_input:
-            raise ValueError("缺少出生时间：紫微排盘需要出生时辰，请先向用户确认")
+            raise ValueError(MISSING_TIME)
         raw = {
             "year": int(raw_input["year"]),
             "month": int(raw_input["month"]),
@@ -205,7 +196,7 @@ def normalize_input(payload: dict[str, Any]) -> BirthInfo:
         }
         is_leap = bool(raw_input.get("is_leap_month", False))
     else:
-        raw = parse_datetime_string(str(raw_input))
+        raw = parse_datetime_string(str(raw_input), MISSING_TIME)
         is_leap = bool(payload.get("is_leap_month", False))
 
     if not (0 <= raw["hour"] <= 23 and 0 <= raw["minute"] <= 59):
@@ -214,13 +205,11 @@ def normalize_input(payload: dict[str, Any]) -> BirthInfo:
     if calendar_type == "solar":
         solar_date = date(raw["year"], raw["month"], raw["day"])
     elif calendar_type == "lunar":
-        solar_date = lunar_to_solar_date(raw["year"], raw["month"], raw["day"], is_leap)
+        solar_date = lunar_to_solar(raw["year"], raw["month"], raw["day"], is_leap, locale)
     else:
         raise ValueError(f"不支持的 calendar_type: {calendar_type}（只接受 solar 或 lunar）")
 
-    gender_raw = str(payload.get("gender") or "").strip().lower()
-    if gender_raw not in GENDER_ALIASES:
-        raise ValueError("缺少或无法识别 gender（男/女）：性别决定大限顺逆，请先向用户确认")
+    gender = parse_gender(payload.get("gender"), "性别决定大限顺逆")
 
     leap_rule = payload.get("leap_month_rule")
     leap_rule_source = "explicit"
@@ -231,21 +220,28 @@ def normalize_input(payload: dict[str, Any]) -> BirthInfo:
     late_zi_rule = payload.get("late_zi_rule") or "next_day"
     if late_zi_rule not in LATE_ZI_RULES:
         raise ValueError(f"late_zi_rule 只接受 {sorted(LATE_ZI_RULES)}")
+    sihua_rule = payload.get("sihua_rule") or DEFAULT_SIHUA_RULE
+    if sihua_rule not in SIHUA_RULES:
+        raise ValueError(f"sihua_rule 只接受 {sorted(SIHUA_RULES)}")
 
-    minutes = raw["hour"] * 60 + raw["minute"]
-    boundary_distance = min((minutes - 60) % 120, 120 - (minutes - 60) % 120)
-    if boundary_distance <= 15:
-        warnings.append("出生时间距时辰交界不足 15 分钟，时辰有误差时盘面会整体改变，建议按相邻两个时辰各排一盘对照。")
+    civil = datetime(solar_date.year, solar_date.month, solar_date.day, raw["hour"], raw["minute"])
+    birth, true_solar = apply_true_solar_time(payload, civil)
+    boundary = hour_boundary_warning(birth.hour, birth.minute, "盘面会整体改变")
+    warnings += ([boundary] if boundary else []) + clock_warnings(payload, civil)
 
     return BirthInfo(
         calendar_type=calendar_type,
-        solar_date=solar_date,
-        hour=raw["hour"],
-        minute=raw["minute"],
-        gender=GENDER_ALIASES[gender_raw],
+        solar_date=birth.date(),
+        hour=birth.hour,
+        minute=birth.minute,
+        civil_datetime=civil,
+        true_solar_time=true_solar,
+        gender=gender,
         leap_month_rule=leap_rule,
         leap_month_rule_source=leap_rule_source,
         late_zi_rule=late_zi_rule,
+        sihua_rule=sihua_rule,
+        calendar_locale=locale,
         original_input=raw_input,
         warnings=warnings,
     )
@@ -265,10 +261,8 @@ def resolve_calendar(info: BirthInfo) -> dict[str, Any]:
         chart_date = info.solar_date + timedelta(days=1)
         day_rollover = True
 
-    lunar = Solar.fromYmd(chart_date.year, chart_date.month, chart_date.day).getLunar()
-    lunar_month = abs(lunar.getMonth())
-    is_leap = lunar.getMonth() < 0
-    lunar_day = lunar.getDay()
+    lunar = solar_to_lunar(chart_date, info.calendar_locale)
+    lunar_month, lunar_day, is_leap = lunar.month, lunar.day, lunar.is_leap
 
     chart_month = lunar_month
     if is_leap:
@@ -276,12 +270,12 @@ def resolve_calendar(info: BirthInfo) -> dict[str, Any]:
         if rule == "next" or (rule == "split_15" and lunar_day > 15):
             chart_month = lunar_month % 12 + 1
 
-    year_stem = STEMS[lunar.getYearGanIndex()]
-    year_branch = BRANCHES[lunar.getYearZhiIndex()]
+    year_stem = STEMS[(lunar.year - 4) % 10]
+    year_branch = BRANCHES[(lunar.year - 4) % 12]
     return {
         "chart_solar_date": chart_date,
         "day_rollover": day_rollover,
-        "lunar_year": lunar.getYear(),
+        "lunar_year": lunar.year,
         "lunar_month": lunar_month,
         "lunar_day": lunar_day,
         "is_leap_month": is_leap,
@@ -289,7 +283,7 @@ def resolve_calendar(info: BirthInfo) -> dict[str, Any]:
         "year_stem": year_stem,
         "year_branch": year_branch,
         "hour_index": hour_idx,
-        "lunar_text": f"{lunar.getYearInGanZhi()}年{lunar.getMonthInChinese()}月{lunar.getDayInChinese()}",
+        "lunar_text": lunar.text,
     }
 
 
@@ -367,9 +361,9 @@ def place_adjective_stars(year_branch: str, chart_month: int) -> dict[str, int]:
     }
 
 
-def sihua_for_stem(stem: str, star_index: dict[str, int], palace_name_by_branch: dict[int, str]) -> list[dict[str, Any]]:
+def sihua_for_stem(stem: str, star_index: dict[str, int], palace_name_by_branch: dict[int, str], rule: str = DEFAULT_SIHUA_RULE) -> list[dict[str, Any]]:
     result = []
-    for kind, star in zip(SIHUA_TYPES, SIHUA[stem]):
+    for kind, star in zip(SIHUA_TYPES, SIHUA_RULES[rule][stem]):
         idx = star_index[star]
         result.append({"type": kind, "star": star, "branch": BRANCHES[idx], "palace": palace_name_by_branch[idx]})
     return result
@@ -400,7 +394,7 @@ def build_chart(info: BirthInfo) -> dict[str, Any]:
     adjective = place_adjective_stars(year_branch, chart_month)
     star_index = {**major, **minor, **adjective}
 
-    year_sihua = sihua_for_stem(year_stem, star_index, palace_name_by_branch)
+    year_sihua = sihua_for_stem(year_stem, star_index, palace_name_by_branch, info.sihua_rule)
     sihua_by_star = {item["star"]: item["type"] for item in year_sihua}
 
     direction = decadal_direction(year_stem, info.gender)
@@ -443,6 +437,7 @@ def build_chart(info: BirthInfo) -> dict[str, Any]:
         "palace_name_by_branch": palace_name_by_branch,
         "stems_by_branch": stems_by_branch,
         "decadal_by_branch": decadal_by_branch,
+        "sihua_rule": info.sihua_rule,
     }
 
 
@@ -487,7 +482,7 @@ def build_horoscope(chart: dict[str, Any], query_year: int) -> dict[str, Any]:
                  "natal_palace": names[wrap(year_branch_idx - i)]}
                 for i in range(12)
             ],
-            "sihua": sihua_for_stem(year_stem, chart["star_index"], names),
+            "sihua": sihua_for_stem(year_stem, chart["star_index"], names, chart["sihua_rule"]),
         },
         "decadal": None,
     }
@@ -500,7 +495,7 @@ def build_horoscope(chart: dict[str, Any], query_year: int) -> dict[str, Any]:
                 "natal_palace": names[idx],
                 "start_age": span["start_age"],
                 "end_age": span["end_age"],
-                "sihua": sihua_for_stem(stem, chart["star_index"], names),
+                "sihua": sihua_for_stem(stem, chart["star_index"], names, chart["sihua_rule"]),
             }
     return result
 
@@ -510,7 +505,7 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
     chart = build_chart(info)
     cal = chart["calendar"]
     check = self_check(chart)
-    warnings = list(info.warnings)
+    warnings = list(info.warnings) + calendar_locale_warnings(info.calendar_locale, cal["chart_solar_date"])
     if cal["day_rollover"]:
         warnings.append("出生于 23 点后，已按次日子时排盘（农历日期取次日）；若用户既定口径不换日，请改用 late_zi_rule=same_day 重排。")
     if cal["is_leap_month"]:
@@ -525,11 +520,13 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
         "normalized_input": {
             "calendar_type": info.calendar_type,
             "original_birth_time": info.original_input,
-            "civil_solar_datetime": f"{info.solar_date.isoformat()} {info.hour:02d}:{info.minute:02d}",
+            "civil_solar_datetime": info.civil_datetime.isoformat(sep=" ", timespec="minutes"),
+            "true_solar_time": info.true_solar_time,
             "gender": info.gender,
             "leap_month_rule": info.leap_month_rule,
             "leap_month_rule_source": info.leap_month_rule_source,
             "late_zi_rule": info.late_zi_rule,
+            "calendar_locale": info.calendar_locale,
         },
         "calendar": {
             "chart_solar_date": cal["chart_solar_date"].isoformat(),
@@ -548,6 +545,7 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
             "id": str(payload.get("ruleset") or DEFAULT_RULESET),
             "source": "references/calculation.md、references/sihua.md、references/stars.md",
             "year_rule": "以农历正月初一换年，年干支取农历年。",
+            "calendar_locale": CALENDAR_LOCALES[info.calendar_locale],
             "late_zi_rule": LATE_ZI_RULES[info.late_zi_rule],
             "leap_month_rule": {
                 "id": info.leap_month_rule,
@@ -555,7 +553,9 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
                 "description": LEAP_MONTH_RULES[info.leap_month_rule],
                 "applied": cal["is_leap_month"],
             },
+            "sihua_rule": {"id": info.sihua_rule, "description": SIHUA_RULE_TEXT[info.sihua_rule]},
             "age_rule": "大限年龄为虚岁。",
+            "time_rule": "按真太阳时排盘（经度时差 + 均时差，见 normalized_input.true_solar_time）。" if info.true_solar_time else "按输入的民用时间排盘，未做真太阳时校正。",
         },
         "chart": {
             "ming_gong": {"branch": BRANCHES[ming_idx], "ganzhi": chart["stems_by_branch"][ming_idx] + BRANCHES[ming_idx]},
@@ -578,25 +578,7 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Compute a structured ziwei doushu chart payload.")
-    parser.add_argument("--input", required=True, help="Path to input JSON")
-    parser.add_argument("--output", required=True, help="Path to output JSON")
-    args = parser.parse_args()
-
-    input_path = Path(args.input)
-    output_path = Path(args.output)
-
-    try:
-        payload = json.loads(input_path.read_text(encoding="utf-8-sig"))
-        output = build_output(payload)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_path.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
-        return 0
-    except Exception as exc:
-        error_payload = {"error": str(exc)}
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_path.write_text(json.dumps(error_payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        return 1
+    return run_cli(build_output, "Compute a structured ziwei doushu chart payload.")
 
 
 if __name__ == "__main__":

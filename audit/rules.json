@@ -1,0 +1,4083 @@
+[
+  {
+    "id": "core.table.DEFAULT_TIMEZONE",
+    "engine": "core",
+    "kind": "table",
+    "location": "core/calendar_core.py:19",
+    "fingerprint": "87af758f5b13e6e9",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function._lp",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:23",
+    "fingerprint": "37c2789aca6596e4",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "按需导入依赖",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.table.STEMS",
+    "engine": "core",
+    "kind": "table",
+    "location": "core/calendar_core.py:32",
+    "fingerprint": "20ad319adfcd324e",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.table.BRANCHES",
+    "engine": "core",
+    "kind": "table",
+    "location": "core/calendar_core.py:33",
+    "fingerprint": "1b421d58ef46f438",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.table.CALENDAR_LOCALES",
+    "engine": "core",
+    "kind": "table",
+    "location": "core/calendar_core.py:34",
+    "fingerprint": "d4683084a4e71937",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "The vn-branch description already states which part does not match the sources; see core.table.VN_UTC7_FROM_SUI.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.table.J2000_JDN",
+    "engine": "core",
+    "kind": "table",
+    "location": "core/calendar_core.py:38",
+    "fingerprint": "3d98cab21642fe20",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.table.ORDINAL_TO_JDN",
+    "engine": "core",
+    "kind": "table",
+    "location": "core/calendar_core.py:39",
+    "fingerprint": "fee8ebafc1fdfd47",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "儒略日换算常数（天文学定义，非术数规则）",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.table.VN_UTC7_FROM_SUI",
+    "engine": "core",
+    "kind": "table",
+    "location": "core/calendar_core.py:40",
+    "fingerprint": "bd0559d532b28559",
+    "claim": "The Vietnamese lunar calendar uses UTC+7 from the sui of 1967 (lunar month 11 ≈ Dec 1967); before that the script computes it like the Chinese calendar at 120°E.",
+    "sources": [
+      {
+        "id": "aslaksen-chinese-calendar",
+        "locator": "Draft 2010-07-17, p. 29: Vietnam traditionally used the Chinese calendar on the Beijing meridian (116°25′E); the northern government approved a UTC+7 calendar on 8 Aug 1967",
+        "stance": "disagree"
+      },
+      {
+        "id": "ho-ngoc-duc-amlich",
+        "locator": "calrules_en.html (Wayback 2008-08-03), section Vietnamese calendar rules, last rule: calculations are based on the meridian 105°E (confirms 105°E only; says nothing about the year it applies from or the period before 1967)",
+        "stance": "partial"
+      }
+    ],
+    "verdict": "conflict",
+    "notes": "Ho Ngoc Duc confirms the Vietnamese calendar uses 105°E (UTC+7) but does not say from which year and says nothing about the period before 1967. The conflict remains: Aslaksen p. 29 says that before 1967 Vietnam used the Beijing meridian, not 120°E, so dates may differ by one day. The 'sui of 1967' cut-off is inferred from the 8 Aug 1967 approval and Tet 1968; the source does not state it directly. Code not changed: the pre-1967 part still has only one source.",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.table.GENDER_ALIASES",
+    "engine": "core",
+    "kind": "table",
+    "location": "core/calendar_core.py:41",
+    "fingerprint": "90773523de8a43a7",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "输入别名",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function.parse_datetime_string",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:44",
+    "fingerprint": "d6afe7bab264e93c",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "输入解析，不含术数规则",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function.parse_gender",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:68",
+    "fingerprint": "a496ba76c2aa51a9",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "输入解析",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function.validate_leap_month",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:75",
+    "fingerprint": "2489b53c00c74042",
+    "claim": "Raises an error when the requested leap month does not exist in that Chinese lunar year.",
+    "sources": [
+      {
+        "id": "hko-calendar-tables",
+        "locator": "T2033e.txt, line 2033/12/22 (one example)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one example so far; lunar_python is the code's own library, so it does not count as a source.",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestLunarCalendar"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function.hour_boundary_warning",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:80",
+    "fingerprint": "7abed98eff6ba222",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function.get_zone",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:88",
+    "fingerprint": "7d2a812ccaf7da66",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "时区名称解析（IANA tz 数据库）",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function.payload_timezone",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:95",
+    "fingerprint": "deb4ed9290464d1c",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "读取输入字段",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function.clock_warnings",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:99",
+    "fingerprint": "fbe80ca4f41536fa",
+    "claim": "Warns about daylight saving time and non-existent/repeated clock times from tzdb data (China 1986–1991).",
+    "sources": [
+      {
+        "id": "iana-tzdb",
+        "locator": "asia, Rule PRC lines 448–450 and the comment quoting the government notice",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "zoneinfo uses tzdb itself, so there is no second independent source yet.",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestClockWarnings"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function.equation_of_time_minutes",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:117",
+    "fingerprint": "784cf4fb68c95eb9",
+    "claim": "Equation of time per the NOAA formula: γ = 2π/365 (366 in leap years)·(day of year − 1 + (UTC hour − 12)/24), eqtime = 229.18·(…).",
+    "sources": [
+      {
+        "id": "noaa-solar-calculations",
+        "locator": "p. 1, fractional year and eqtime",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Code changed to match NOAA (it previously always used 365 and local time). The NOAA document gives neither the formula's author nor its accuracy; a second source is needed.",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestAgainstSources"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function.true_solar_time",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:126",
+    "fingerprint": "57c3de0e1f059c9d",
+    "claim": "True solar time = UTC + 4·longitude (minutes, east positive) + equation of time; UTC is derived from the time zone including daylight saving time.",
+    "sources": [
+      {
+        "id": "noaa-solar-calculations",
+        "locator": "tr. 1, time_offset = eqtime + 4*longitude − 60*timezone",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one source so far.",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestAgainstSources"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function.apply_true_solar_time",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:147",
+    "fingerprint": "9e24fd29dd43ceef",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function.LunarDate",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:164",
+    "fingerprint": "2ca0c8b9ea108deb",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function.parse_calendar_locale",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:176",
+    "fingerprint": "5be9224505892cf2",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function._new_moon_jdn",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:184",
+    "fingerprint": "39cf742552b828a7",
+    "claim": "The new-moon day is computed in the local time of the calendar meridian: 120°E (UTC+8) for the Chinese calendar since 1929, shifted by time zone for other calendars. New-moon instants come from lunar_python's ShouXingUtil.shuoHigh.",
+    "sources": [
+      {
+        "id": "aslaksen-chinese-calendar",
+        "locator": "Draft 2010-07-17, tr. 18 (Rule 1)",
+        "stance": "agree"
+      },
+      {
+        "id": "ytliu0-chinese-calendar",
+        "locator": "rules.html, Lunar Conjunction (New Moon); computation.html, Modern Period (1912–2200)",
+        "stance": "agree"
+      },
+      {
+        "id": "hko-calendar-tables",
+        "locator": "tables 1985, 2007, 2024, 2033",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "Ephemeris accuracy is checked only indirectly through the HKO golden cases; new-moon instants have not been compared minute by minute.",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestLunarCalendar",
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function._term_jdn",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:190",
+    "fingerprint": "2434353b10a313cd",
+    "claim": "Solar term and principal term days are computed in the local time of the calendar meridian (UTC+8 for the Chinese calendar); instants come from ShouXingUtil.qiHigh.",
+    "sources": [
+      {
+        "id": "ytliu0-chinese-calendar",
+        "locator": "rules.html (times in China standard time, UTC+08:00)",
+        "stance": "agree"
+      },
+      {
+        "id": "hko-calendar-tables",
+        "locator": "T2024e.txt: 2024/2/4 Spring Commences; T2033e.txt: 2033/11/22 Light Snow",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "Checked to the day only; no T1 source yet for instants to the minute (NAOJ tables not read).",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestLunarCalendar",
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function._lunation_containing",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:195",
+    "fingerprint": "a911bda393d3d9a2",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.function._sui_months",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:205",
+    "fingerprint": "bbbedc5a2595e4b8",
+    "claim": "The month containing the winter solstice is month 11; when a sui (from month 11 to the next month 11) has 13 months, the first month after month 11 without a principal term is the leap month and takes the number of the previous month.",
+    "sources": [
+      {
+        "id": "aslaksen-chinese-calendar",
+        "locator": "Draft 2010-07-17, tr. 22 (Rule 4), tr. 23 (Rule 5)",
+        "stance": "agree"
+      },
+      {
+        "id": "ytliu0-chinese-calendar",
+        "locator": "rules.html, Rules for the Modern Chinese Calendar, rule 4–5",
+        "stance": "agree"
+      },
+      {
+        "id": "hko-calendar-tables",
+        "locator": "T2033e.txt: '11th Lunar Month' repeats at 2033/11/22 and 2033/12/22",
+        "stance": "agree"
+      },
+      {
+        "id": "ho-ngoc-duc-amlich",
+        "locator": "calrules_en.html (Wayback 2008-08-03), section Vietnamese calendar rules, rules 3–4; section Why 1985 has a leap lunar month",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "The 2033 golden case (leap month 11) matches HKO; ytliu0 examples.html 'Example 2: N2033' gives the same result. Ho Ngoc Duc: the 1985 leap month 2 (Vietnamese calendar) and the Chinese leap month 23 Nov–21 Dec 1984 match; the month number 10 comes from HKO T1984e.txt.",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestLunarCalendar",
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function._lunar_from_jdn",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:225",
+    "fingerprint": "b53bf0e97ffab859",
+    "claim": "The day of the new moon is day 1 of the month.",
+    "sources": [
+      {
+        "id": "aslaksen-chinese-calendar",
+        "locator": "Draft 2010-07-17, tr. 19 (Rule 3)",
+        "stance": "agree"
+      },
+      {
+        "id": "ytliu0-chinese-calendar",
+        "locator": "rules.html, rule 3",
+        "stance": "agree"
+      },
+      {
+        "id": "hko-calendar-tables",
+        "locator": "T1985e.txt, T2007e.txt, T2024e.txt",
+        "stance": "agree"
+      },
+      {
+        "id": "ho-ngoc-duc-amlich",
+        "locator": "calrules_en.html (Wayback 2008-08-03), section Vietnamese calendar rules, rule 1",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "How lunar years are assigned (months 11 and 12 belong to the previous year) has no direct source sentence yet; it only matches the HKO data.",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestLunarCalendar",
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function.solar_to_lunar",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:235",
+    "fingerprint": "6d552d7f46b91378",
+    "claim": "calendar_locale=cn returns the Chinese lunar calendar (120°E meridian), matching the HKO tables. calendar_locale=vn computes at UTC+7 (105°E), matching the northern calendar from 1967 and the Vietnamese Tet dates and leap months given by Ho Ngoc Duc (1985, 2007, 2030, 2053).",
+    "sources": [
+      {
+        "id": "hko-calendar-tables",
+        "locator": "T1985e.txt, T2007e.txt, T2024e.txt, T2033e.txt (lines in audit/cases/ziwei)",
+        "stance": "agree"
+      },
+      {
+        "id": "aslaksen-chinese-calendar",
+        "locator": "Draft 2010-07-17, pp. 18–23 (Rules 1, 3, 4, 5); p. 29 (Vietnamese calendar at UTC+7 from 1967)",
+        "stance": "agree"
+      },
+      {
+        "id": "ho-ngoc-duc-amlich",
+        "locator": "calrules_en.html (Wayback 2008-08-03), sections Comparison with Chinese calendar and Why 1985 has a leap lunar month (cases in audit/cases/ziwei)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "The vn branch is confirmed only for the northern calendar from 1967 and the national calendar after reunification. The South in 1967–1975 is out of scope (see core.function.calendar_locale_warnings); for dates before 1967 see core.table.VN_UTC7_FROM_SUI (conflict). Two sources for the vn branch: Ho Ngoc Duc (105°E, examples) and Aslaksen p. 29 (the North approved the UTC+7 calendar on 8 Aug 1967; northern Tet 1968). Not yet checked whether Aslaksen relies on the Explanatory Supplement; if so, the two sources are less independent.",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestLunarCalendar",
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function.lunar_to_solar",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:243",
+    "fingerprint": "a2eba8f003c59460",
+    "claim": "The inverse of solar_to_lunar under the same rules; raises an error when the leap month or day does not exist.",
+    "sources": [
+      {
+        "id": "aslaksen-chinese-calendar",
+        "locator": "Draft 2010-07-17, tr. 19–23 (Rule 3–5)",
+        "stance": "agree"
+      },
+      {
+        "id": "hko-calendar-tables",
+        "locator": "tables 1985, 2007, 2033",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "Round trips match for every day 1967–2100 (test vn_round_trip).",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestLunarCalendar"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function.calendar_locale_warnings",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:264",
+    "fingerprint": "feb5f8f6beaed738",
+    "claim": "Warns when the Vietnamese and Chinese calendars differ on that date; for dates from Dec 1967 to before 13 Jun 1975, warns that the South used UTC+8 clock time and the traditional lunar calendar.",
+    "sources": [
+      {
+        "id": "aslaksen-chinese-calendar",
+        "locator": "Draft 2010-07-17, p. 29: Tet 1968 was 29 Jan in the North and 30 Jan in the South (the South followed the traditional calendar)",
+        "stance": "agree"
+      },
+      {
+        "id": "iana-tzdb",
+        "locator": "asia, lines 4192–4194 (South Vietnam +07 from 1955-07-01, +08 from 1959-12-31, +07 from 1975-06-13)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Each source proves only part: tzdb covers clock time, Aslaksen covers only 1968. The South's lunar calendar in 1969–1975 has no source yet.",
+    "tests": [
+      "core/tests/test_calendar_core.py::TestAgainstSources"
+    ],
+    "stale": false
+  },
+  {
+    "id": "core.function.run_cli",
+    "engine": "core",
+    "kind": "function",
+    "location": "core/calendar_core.py:277",
+    "fingerprint": "03ba7c248bc7e42b",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "命令行读写 JSON",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "core.doc.thuat-ngu-chung.md",
+    "engine": "core",
+    "kind": "doc",
+    "location": "core/thuat-ngu-chung.md",
+    "fingerprint": "fea1000c4e59009c",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.table.DEFAULT_RULESET",
+    "engine": "bazi",
+    "kind": "table",
+    "location": "bazi/scripts/bazi_cli.py:28",
+    "fingerprint": "6de4450f18d1df78",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.table.STEMS",
+    "engine": "bazi",
+    "kind": "table",
+    "location": "bazi/scripts/bazi_cli.py:29",
+    "fingerprint": "20ad319adfcd324e",
+    "claim": "Order of the 10 heavenly stems; odd stems (甲丙戊庚壬) are yang, even stems are yin.",
+    "sources": [
+      {
+        "id": "sanming-tonghui",
+        "locator": "卷二 论天干阴阳生死: 十干五阳五阴; 甲 阳木, 乙 阴木…",
+        "stance": "agree"
+      },
+      {
+        "id": "yuanhai-ziping",
+        "locator": "基础: 五干属阳 (with 甲 as the example), 五干属阴 (with 乙 as the example); not listed in full",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.table.STEM_WUXING",
+    "engine": "bazi",
+    "kind": "table",
+    "location": "bazi/scripts/bazi_cli.py:30",
+    "fingerprint": "25dc3ca37e409286",
+    "claim": "Elements of the stems: 甲乙 wood, 丙丁 fire, 戊己 earth, 庚辛 metal, 壬癸 water.",
+    "sources": [
+      {
+        "id": "sanming-tonghui",
+        "locator": "卷二 论天干阴阳生死 and 论十干合 (甲乙木, 丙丁火, 戊己土, 庚辛金, 壬癸水)",
+        "stance": "agree"
+      },
+      {
+        "id": "yuanhai-ziping",
+        "locator": "络绎赋: 甲乙之木…壬癸之水…丙丁火…庚辛金…戊己两干之土",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.table.LATE_ZI_RULES",
+    "engine": "bazi",
+    "kind": "table",
+    "location": "bazi/scripts/bazi_cli.py:33",
+    "fingerprint": "ead37feab77ee39c",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.table.MISSING_TIME",
+    "engine": "bazi",
+    "kind": "table",
+    "location": "bazi/scripts/bazi_cli.py:37",
+    "fingerprint": "81d90c8e0d3e9044",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "提示文字",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.table.JIE_WARNING_HOURS",
+    "engine": "bazi",
+    "kind": "table",
+    "location": "bazi/scripts/bazi_cli.py:38",
+    "fingerprint": "03c856864d3e84ee",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.table.PILLAR_KEYS",
+    "engine": "bazi",
+    "kind": "table",
+    "location": "bazi/scripts/bazi_cli.py:39",
+    "fingerprint": "96ae3e6c29379406",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "输出字段名",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.function.normalize_input",
+    "engine": "bazi",
+    "kind": "function",
+    "location": "bazi/scripts/bazi_cli.py:42",
+    "fingerprint": "d3e0b1e88bfe8a05",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "输入解析与校验",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.function.to_datetime",
+    "engine": "bazi",
+    "kind": "function",
+    "location": "bazi/scripts/bazi_cli.py:86",
+    "fingerprint": "136976fdbbb65182",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "类型转换",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.function.build_pillar",
+    "engine": "bazi",
+    "kind": "function",
+    "location": "bazi/scripts/bazi_cli.py:90",
+    "fingerprint": "5750ec5df24a13a4",
+    "claim": "Each pillar: stem-branch, elements, yin/yang, the stem's ten god, hidden stems with their ten gods (from lunar_python).",
+    "sources": [
+      {
+        "id": "yuanhai-ziping",
+        "locator": "又地支藏遁歌; 基础 (ten gods)",
+        "stance": "agree"
+      },
+      {
+        "id": "shenfeng-tongkao",
+        "locator": "ten gods: 甲见庚为杀，辛为官，见丙为食，丁为伤; 食神者，我生彼之谓也。阳见阳干",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Hidden stems match 淵海子平 as sets; the order in the output is lunar_python's, and the book gives no order. Ten gods match 淵海 (甲, 乙) and 神峰. Nayin, twelve stages (dishi) and xunkong not yet checked.",
+    "tests": [
+      "bazi/scripts/tests/test_bazi_cli.py::TestReferenceConsistency"
+    ],
+    "stale": false
+  },
+  {
+    "id": "bazi.function.build_output",
+    "engine": "bazi",
+    "kind": "function",
+    "location": "bazi/scripts/bazi_cli.py:115",
+    "fingerprint": "d274477ee7e4443d",
+    "claim": "Builds the four pillars, warnings, luck periods (the 60-cycle sequence starting from the month pillar; the month pillar before the first period) and annual pillars.",
+    "sources": [
+      {
+        "id": "sanming-tonghui",
+        "locator": "卷二 论大运: in the example the period before the first luck period is 丁丑 (the month pillar)",
+        "stance": "agree"
+      },
+      {
+        "id": "shenfeng-tongkao",
+        "locator": "起大运法",
+        "stance": "agree"
+      },
+      {
+        "id": "ditian-sui-chanwei",
+        "locator": "filtered by script: 416 of 502 runs of ≥10 stem-branches in the book have the sequence after the four pillars adjacent to the month pillar (forward or backward); not every chart, and the other 86 runs were not inspected",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The luck-period part matches the sources. Year change at Lichun, month change at solar terms, the late Zi hour and annual pillars have no direct source sentence yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.ruleset.year_rule",
+    "engine": "bazi",
+    "kind": "ruleset",
+    "location": "bazi/scripts/bazi_cli.py:169",
+    "fingerprint": "469d2c19dd8fd9d9",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.ruleset.calendar_locale",
+    "engine": "bazi",
+    "kind": "ruleset",
+    "location": "bazi/scripts/bazi_cli.py:170",
+    "fingerprint": "e3d16063623a920a",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.ruleset.month_rule",
+    "engine": "bazi",
+    "kind": "ruleset",
+    "location": "bazi/scripts/bazi_cli.py:171",
+    "fingerprint": "5156b37a035243ae",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.ruleset.late_zi_rule",
+    "engine": "bazi",
+    "kind": "ruleset",
+    "location": "bazi/scripts/bazi_cli.py:172",
+    "fingerprint": "745d019b13779144",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.ruleset.yun_rule",
+    "engine": "bazi",
+    "kind": "ruleset",
+    "location": "bazi/scripts/bazi_cli.py:173",
+    "fingerprint": "70462bbf00f27a6b",
+    "claim": "Luck periods: yang male / yin female run forward, yin male / yang female run backward; starting age = days to the next solar term (forward) or the previous one (backward) ÷ 3 (3 days = 1 year, 1 shichen = 10 days).",
+    "sources": [
+      {
+        "id": "sanming-tonghui",
+        "locator": "卷二 论大运: 阳男阴女…顺而行之；阴男阳女…逆而行之; 折除以三日为年, 三千六百日为一辰之十岁; example: 甲子 yang male, 1 year 9 months",
+        "stance": "agree"
+      },
+      {
+        "id": "shenfeng-tongkao",
+        "locator": "起大运法 阳男阴女 / 阴男阳女: 折除三日为一岁; 4 examples (甲子 male 丁卯, 乙丑 female 四岁 己卯, 乙丑 male 五岁 backward, 甲子 female 三岁 backward)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "5 golden cases rebuilt from examples in the books (audit/cases/bazi); the dates and times are reconstructed, not given in the books.",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "bazi.ruleset.age_rule",
+    "engine": "bazi",
+    "kind": "ruleset",
+    "location": "bazi/scripts/bazi_cli.py:174",
+    "fingerprint": "975dfea5b322f649",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.ruleset.time_rule",
+    "engine": "bazi",
+    "kind": "ruleset",
+    "location": "bazi/scripts/bazi_cli.py:175",
+    "fingerprint": "55843300ab561a0a",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.doc.SKILL.md",
+    "engine": "bazi",
+    "kind": "doc",
+    "location": "bazi/SKILL.md",
+    "fingerprint": "9c393ecf599a65ed",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.doc.prompt-template.md",
+    "engine": "bazi",
+    "kind": "doc",
+    "location": "bazi/references/prompt-template.md",
+    "fingerprint": "d80c9f43e3790d57",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "Process document written by the project; contains no divination rules that need sources; noted at the top of the file (A7).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.doc.thuat-ngu-vi.md",
+    "engine": "bazi",
+    "kind": "doc",
+    "location": "bazi/references/thuat-ngu-vi.md",
+    "fingerprint": "63a0198b47d08839",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "Sino-Vietnamese glossary, not an interpretive claim (A7). Sino-Vietnamese readings not checked against a dictionary.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "bazi.doc.tiangan-dizhi.md",
+    "engine": "bazi",
+    "kind": "doc",
+    "location": "bazi/references/tiangan-dizhi.md",
+    "fingerprint": "d265a69089185334",
+    "claim": "Tables of heavenly stems, earthly branches, hidden stems, ten gods, month and hour stem derivation (五虎遁, 五鼠遁), luck periods, clashes, punishments and combinations.",
+    "sources": [
+      {
+        "id": "yuanhai-ziping",
+        "locator": "又地支藏遁歌 (hidden stems for all 12 branches); 基础 (ten gods for 甲, 乙)",
+        "stance": "agree"
+      },
+      {
+        "id": "sanming-tonghui",
+        "locator": "卷二: 论遁月时 (甲己之年丙作首…; 甲己还加甲…), 论大运, 论支元六合, 论支元三合, 论三刑, 论冲击",
+        "stance": "agree"
+      },
+      {
+        "id": "shenfeng-tongkao",
+        "locator": "起八字诀 (年上遁月, 日上遁时); ten gods: 甲见庚为杀，辛为官，见丙为食，丁为伤; 偏官为阳见阳",
+        "stance": "agree"
+      },
+      {
+        "id": "ditian-sui-chanwei",
+        "locator": "commentary: 辰中癸水, 丑中蓄水含金, 未中木火, 寅中丙火, 申中壬水",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. Every section is sourced except the elements of the six combinations, the order of hidden stems and the hours of each branch.",
+    "tests": [
+      "bazi/scripts/tests/test_bazi_cli.py::TestReferenceConsistency"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.DEFAULT_RULESET",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:17",
+    "fingerprint": "51795acf0889af3f",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.BRANCHES",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:18",
+    "fingerprint": "1b421d58ef46f438",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "Standard order of the 12 earthly branches, used only to compute clashes (6 branches apart); not a Liu Yao rule of its own.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.BRANCH_ELEMENT",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:19",
+    "fingerprint": "b4be7351322fa5e9",
+    "claim": "Elements of the branches: 寅卯 wood, 巳午 fire, 申酉 metal, 亥子 water, 辰戌丑未 earth.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 4 (each branch with its element)",
+        "stance": "agree"
+      },
+      {
+        "id": "huozhu-lin",
+        "locator": "section 財官輔助 (seasonal strength)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.TRIGRAMS",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:21",
+    "fingerprint": "9497630208804690",
+    "claim": "Trigram lines (bottom up, 1 = yang) and elements: 乾兌 metal, 離 fire, 震巽 wood, 坎 water, 艮坤 earth. Vietnamese names not included.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 2 卦象圖 (乾三連…巽下斷); ch. 5 六親歌 (element of each palace)",
+        "stance": "agree"
+      },
+      {
+        "id": "jingshi-yizhuan",
+        "locator": "卷上–卷中: states the element of 乾 (屬金), 震 (木徳), 坤 (屬土), 兌 (純金), 離 (為火); 坎, 艮, 巽 not stated directly",
+        "stance": "agree"
+      },
+      {
+        "id": "huozhu-lin",
+        "locator": "examples: 乾宮屬金, 艮宮屬土, 坤宮屬土, 震巽屬木, 離屬火",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.TRIGRAM_BY_BITS",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:31",
+    "fingerprint": "205950845bd10682",
+    "claim": "Reverse lookup of TRIGRAMS.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 2",
+        "stance": "agree"
+      },
+      {
+        "id": "jingshi-yizhuan",
+        "locator": "卷上–卷中",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "Derived directly from TRIGRAMS.",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.NAJIA",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:33",
+    "fingerprint": "80644985fe06ce84",
+    "claim": "Najia: stems 乾 甲/壬, 坤 乙/癸, 震 庚, 巽 辛, 坎 戊, 離 己, 艮 丙, 兌 丁; inner/outer trigram branches as in the code table.",
+    "sources": [
+      {
+        "id": "jingshi-yizhuan",
+        "locator": "卷下: 乾坤配甲乙壬癸，震巽配庚辛，坎離配戊己，艮兌配丙丁 (only pairs stems with trigrams); 卷上: 乾 甲壬配外内; each hexagram paragraph gives the stem-branch of the shi line next to 為飛伏: 63/64 match (師 is out of order)",
+        "stance": "agree"
+      },
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 4 渾天甲子章 (branches of the 8 trigrams, inner/outer); ch. 3 八宮圖 (64 hexagrams)",
+        "stance": "agree"
+      },
+      {
+        "id": "huozhu-lin",
+        "locator": "examples: 乾初爻甲子, 遁二爻丙午化辛亥 (姤), 世持辛丑 (姤), 壬申金, 既濟己亥持世",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "The ch. 3 table has a transcription error at 困 line 1 (卯; it is 寅 per ch. 4); see sources.json.",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.KING_WEN",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:44",
+    "fingerprint": "59cfa3c05ff87e22",
+    "claim": "King Wen order 1–64 and the full names of the 64 hexagrams (Chinese). Vietnamese names not included.",
+    "sources": [
+      {
+        "id": "zhouyi-xugua",
+        "locator": "序卦傳, full text: order of the 64 hexagrams",
+        "stance": "agree"
+      },
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 3 八宮圖: full names of the 64 hexagrams",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The 1–64 order has only one source lineage (序卦傳); 增刪 ch. 3 and 京氏 order by palace, so they confirm only the names and the trigram composition. Vietnamese names not checked.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.GENERATIONS",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:79",
+    "fingerprint": "1fd4b9fbac992267",
+    "claim": "8 hexagrams per palace: pure, first to fifth generation (changing from line 1 upward), wandering soul (line 4 changed back from the fifth generation), returning soul (inner trigram returns to the pure hexagram's). Shi line: 6, 1–5, 4, 3.",
+    "sources": [
+      {
+        "id": "jingshi-yizhuan",
+        "locator": "卷上–卷下: the 降入 order and the ranks 元士/大夫/三公/諸侯/天子/宗廟 for each hexagram; all 64 hexagrams",
+        "stance": "agree"
+      },
+      {
+        "id": "huang-zongxi-xiangshulun",
+        "locator": "曰世應: how palaces are built, 遊魂以四爻爲世，歸魂以三爻爲世",
+        "stance": "agree"
+      },
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 6 世應章; ch. 26又4 歸魂遊魂章",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.LIUSHEN",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:83",
+    "fingerprint": "6e41f2a1aff37685",
+    "claim": "Order of the six spirits: 青龍 朱雀 勾陳 螣蛇 白虎 玄武.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 18 六神章 (table; the book writes 滕蛇, 元武)",
+        "stance": "agree"
+      },
+      {
+        "id": "huang-zongxi-xiangshulun",
+        "locator": "術家又有青龍、朱雀、勾陳、騰蛇、白虎、玄武六神",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "Two examples in ch. 18 (剝之觀 on a 戊子 day, 屯之震 on a 甲辰 day) put 滕蛇 below 勾陳, contrary to the table in the same chapter and to 黃宗羲; possibly a transcription error. The code follows the table.",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.LIUSHEN_START",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:84",
+    "fingerprint": "c567ab10807b16c6",
+    "claim": "Starting at line 1 by day stem: 甲乙 青龍, 丙丁 朱雀, 戊 勾陳, 己 螣蛇, 庚辛 白虎, 壬癸 玄武.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 18 六神章, table",
+        "stance": "agree"
+      },
+      {
+        "id": "huang-zongxi-xiangshulun",
+        "locator": "以所占之日，甲乙起青龍…壬癸起玄武",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "See the note on liuyao.table.LIUSHEN.",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.GENERATES",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:85",
+    "fingerprint": "33b2493195707ee4",
+    "claim": "Generating cycle: 金生水，水生木，木生火，火生土，土生金.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 11 五行相生章",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "No second source in the registry yet (a universal five-element rule).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.CONTROLS",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:86",
+    "fingerprint": "81d8cfaf3e53eb86",
+    "claim": "Controlling cycle: 金克木，木克土，土克水，水克火，火克金.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 12 五行相克章",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "No second source in the registry yet (a universal five-element rule).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.LIUQIN_ORDER",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:87",
+    "fingerprint": "f80a9dbc0aec5262",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.function._build_hexagrams",
+    "engine": "liuyao",
+    "kind": "function",
+    "location": "liuyao/scripts/liuyao_cli.py:90",
+    "fingerprint": "d5fbd97178a94495",
+    "claim": "Builds the 64 hexagrams by the 8 palaces, with palace, palace element, shi and ying (ying is 2 lines from shi).",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 3 八宮圖: all 64 hexagrams, compared line by line by script",
+        "stance": "agree"
+      },
+      {
+        "id": "jingshi-yizhuan",
+        "locator": "卷上–卷下: 64 hexagrams, order and shi position",
+        "stance": "agree"
+      },
+      {
+        "id": "huang-zongxi-xiangshulun",
+        "locator": "曰世應: 世之對爲應，初與四、二與五、三與上",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "Compared automatically by script; the 3 mismatches are all transcription errors in the Wikisource copy.",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.table.HEXAGRAMS",
+    "engine": "liuyao",
+    "kind": "table",
+    "location": "liuyao/scripts/liuyao_cli.py:107",
+    "fingerprint": "11c5834d5bd48a16",
+    "claim": "The 64-hexagram table built by _build_hexagrams: palace, palace element, shi, ying. For numbering see liuyao.table.KING_WEN.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 3",
+        "stance": "agree"
+      },
+      {
+        "id": "jingshi-yizhuan",
+        "locator": "卷上–卷下",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.function.liuqin",
+    "engine": "liuyao",
+    "kind": "function",
+    "location": "liuyao/scripts/liuyao_cli.py:110",
+    "fingerprint": "126cd00f5b8425cd",
+    "claim": "Six relations by the palace element: what generates me 父母, what I generate 子孫, what controls me 官鬼, what I control 妻財, same element 兄弟.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 5 六親歌章 (table per palace)",
+        "stance": "agree"
+      },
+      {
+        "id": "jingshi-yizhuan",
+        "locator": "卷下: 鬼為繫爻，財為制爻，天地為義爻（父母），福徳為寶爻（子孫），同氣為専爻",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.function.najia",
+    "engine": "liuyao",
+    "kind": "function",
+    "location": "liuyao/scripts/liuyao_cli.py:122",
+    "fingerprint": "bec10f6aac1fb45a",
+    "claim": "Najia: the inner trigram takes each trigram's inner part, the outer trigram its outer part.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 4: example 天風姤",
+        "stance": "agree"
+      },
+      {
+        "id": "jingshi-yizhuan",
+        "locator": "卷下",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.function.toss",
+    "engine": "liuyao",
+    "kind": "function",
+    "location": "liuyao/scripts/liuyao_cli.py:127",
+    "fingerprint": "fca3e44e7d6c9e58",
+    "claim": "Toss 3 coins: inscribed face 3, back 2; totals 6/7/8/9.",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "No primary sentence found yet. The common 單/拆/重/交 convention (one back is 單, three backs is 重, old yang) gives back = 3, inscription = 2, the reverse of the code; the 占卦法 passage in Wikisource 增刪卜易 ch. 2 says so, but the editor marks it as a transcriber's addition. A primary source (賈公彥《儀禮疏》, 卜筮正宗) is needed before changing anything. No effect when users enter 6/7/8/9 themselves.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.function.resolve_time",
+    "engine": "liuyao",
+    "kind": "function",
+    "location": "liuyao/scripts/liuyao_cli.py:133",
+    "fingerprint": "92166e57d962112d",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "输入解析",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.function.build_output",
+    "engine": "liuyao",
+    "kind": "function",
+    "location": "liuyao/scripts/liuyao_cli.py:143",
+    "fingerprint": "02d6cc8f9e8dc0c4",
+    "claim": "Builds the reading: changed hexagram, relations of changed lines by the original palace, six spirits, hidden spirits, xunkong, month break, day clash.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 7 動變章: 變出之爻安六親者仍照正卦而推; ch. 28 飛伏神章: the hidden spirit comes from the palace's first hexagram, same line",
+        "stance": "agree"
+      },
+      {
+        "id": "huozhu-lin",
+        "locator": "section 出现伏藏 and the Q&A: 本宫之六亲在飞象之下…为之伏神",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The changed hexagram, relations of changed lines and hidden spirits match the sources (golden cases ch. 7, 11, 12, 28). Xunkong, month break and day clash not yet checked. Hidden spirits follow the practitioners' method (增刪, 火珠林); Jing Fang's 飛伏 is based on the shi line and differs (黃宗羲, 曰飛伏).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.ruleset.system",
+    "engine": "liuyao",
+    "kind": "ruleset",
+    "location": "liuyao/scripts/liuyao_cli.py:223",
+    "fingerprint": "b1fa15b2d0efb118",
+    "claim": "System description: shi/ying by the 8 palaces, relations by palace, six spirits by day stem, hidden spirit from the same line of the pure hexagram.",
+    "sources": [
+      {
+        "id": "zengshan-buyi",
+        "locator": "ch. 3, 5, 6, 18; ch. 28 飛伏神章 (hidden spirit from the palace's first hexagram)",
+        "stance": "agree"
+      },
+      {
+        "id": "huozhu-lin",
+        "locator": "Q&A: 本宫之六亲在飞象之下…为之伏神",
+        "stance": "agree"
+      },
+      {
+        "id": "jingshi-yizhuan",
+        "locator": "卷上–卷下: shi/ying by the 8 palaces (hidden spirits not included)",
+        "stance": "agree"
+      },
+      {
+        "id": "huang-zongxi-xiangshulun",
+        "locator": "曰世應; 六神 (hidden spirits not included: Jing Fang's 飛伏 differs)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "The hidden spirit is the practitioners' method, not Jing Fang's 飛伏; see liuyao.function.build_output.",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "liuyao.ruleset.lines_rule",
+    "engine": "liuyao",
+    "kind": "ruleset",
+    "location": "liuyao/scripts/liuyao_cli.py:224",
+    "fingerprint": "d7ca4460c42324b9",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.ruleset.calendar_rule",
+    "engine": "liuyao",
+    "kind": "ruleset",
+    "location": "liuyao/scripts/liuyao_cli.py:225",
+    "fingerprint": "2bf60f1e8e0bbf90",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.ruleset.time_rule",
+    "engine": "liuyao",
+    "kind": "ruleset",
+    "location": "liuyao/scripts/liuyao_cli.py:226",
+    "fingerprint": "be1342b031217e21",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.doc.SKILL.md",
+    "engine": "liuyao",
+    "kind": "doc",
+    "location": "liuyao/SKILL.md",
+    "fingerprint": "f6078652fdf50653",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.doc.thuat-ngu-vi.md",
+    "engine": "liuyao",
+    "kind": "doc",
+    "location": "liuyao/references/thuat-ngu-vi.md",
+    "fingerprint": "33ea4f6d5a3a779a",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "Sino-Vietnamese glossary, not an interpretive claim (A7). Sino-Vietnamese readings not checked against a dictionary.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "liuyao.doc.yongshen.md",
+    "engine": "liuyao",
+    "kind": "doc",
+    "location": "liuyao/references/yongshen.md",
+    "fingerprint": "0b7652492031f2b4",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. The use-god table and yuan/ji/chou gods follow 增刪 ch. 8–10; a few modern rows are flagged.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.table.DEFAULT_RULESET",
+    "engine": "numerology",
+    "kind": "table",
+    "location": "numerology/scripts/numerology_cli.py:14",
+    "fingerprint": "9c77d1e02702b351",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.table.MASTERS",
+    "engine": "numerology",
+    "kind": "table",
+    "location": "numerology/scripts/numerology_cli.py:15",
+    "fingerprint": "3586ec271abd3226",
+    "claim": "Master numbers 11, 22, 33.",
+    "sources": [
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, glossary p. 262: 11, 22, and in rare cases 33",
+        "stance": "agree"
+      },
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, p. 83: 33 is not a master number",
+        "stance": "disagree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The two sources disagree on 33; the phillips rule counts 33 as 6. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.table.LETTER_VALUES",
+    "engine": "numerology",
+    "kind": "table",
+    "location": "numerology/scripts/numerology_cli.py:16",
+    "fingerprint": "9ad8f75b40843adf",
+    "claim": "Pythagorean table: A–I = 1–9, J–R = 1–9, S–Z = 1–8.",
+    "sources": [
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, p. 6, letter table",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Matches Decoz. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet. Phillips's chapter on names (p. 229) not read.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.table.VOWELS",
+    "engine": "numerology",
+    "kind": "table",
+    "location": "numerology/scripts/numerology_cli.py:17",
+    "fingerprint": "e8241432ad1145a7",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.table.GRID",
+    "engine": "numerology",
+    "kind": "table",
+    "location": "numerology/scripts/numerology_cli.py:19",
+    "fingerprint": "38d5f0aefb522eaa",
+    "claim": "3×3 grid: top row 3-6-9, middle 2-5-8, bottom 1-4-7; zeros are not recorded.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, p. 53 (figure 3/31/1950), p. 56, p. 60",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Matches the figures in Phillips chapter 6. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.table.ARROWS",
+    "engine": "numerology",
+    "kind": "table",
+    "location": "numerology/scripts/numerology_cli.py:20",
+    "fingerprint": "0de5ebcd95c05c5c",
+    "claim": "8 arrows: the grid's 3 rows, 3 columns and 2 diagonals.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, chapter 6, pp. 51–79",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Headings read: 8 full arrows and 7 empty arrows; no list of arrows seen, and no empty 1-2-3 arrow seen. The names Spirituality (3-5-7), Will (4-5-6) and Disorder (empty 1-4-7) are partly inferred; see the footnote in y-nghia-so.md. 13 golden cases in audit/cases/numerology. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.table.LIFE_PATH_RULES",
+    "engine": "numerology",
+    "kind": "table",
+    "location": "numerology/scripts/numerology_cli.py:21",
+    "fingerprint": "15aa549d9d489461",
+    "claim": "vn: 2–11, 22, 33; classic: 1–9, 11, 22, 33; phillips: 2–11, 22.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, pp. 82–83 (list of 11 Ruling Numbers, no 1, 33/6 is 6)",
+        "stance": "agree"
+      },
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, pp. 20–21 and glossary p. 262",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The phillips rule matches Phillips; classic matches Decoz. The vn rule (keeping 33) has no book source; it is only common online usage. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet. Decision 2026-11-23: keep vn as the default because Vietnamese users usually compare with local apps; use phillips to follow the book.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.table.LIFE_PATH_METHODS",
+    "engine": "numerology",
+    "kind": "table",
+    "location": "numerology/scripts/numerology_cli.py:26",
+    "fingerprint": "72247f3af97e43cf",
+    "claim": "digits: add every digit; components: reduce month, day and year separately (keeping 11/22), then add.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, p. 82: add each digit of the birth date",
+        "stance": "agree"
+      },
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, pp. 20–21: only the components method is correct",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The two books use different methods; the code offers both as a parameter, defaulting to digits (as Phillips). Decoz calls adding the whole numbers and then reducing wrong; the code does not offer that method. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.function.digit_sum",
+    "engine": "numerology",
+    "kind": "function",
+    "location": "numerology/scripts/numerology_cli.py:32",
+    "fingerprint": "4672942e0122a187",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.function.reduce_number",
+    "engine": "numerology",
+    "kind": "function",
+    "location": "numerology/scripts/numerology_cli.py:36",
+    "fingerprint": "04936f3a113a2748",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.function.reduce_life_path",
+    "engine": "numerology",
+    "kind": "function",
+    "location": "numerology/scripts/numerology_cli.py:42",
+    "fingerprint": "8c6ef275244aefc9",
+    "claim": "Reduces the total under the vn / classic / phillips rule.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, tr. 82–84",
+        "stance": "agree"
+      },
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, tr. 20–21",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "See numerology.table.LIFE_PATH_RULES. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.function.number",
+    "engine": "numerology",
+    "kind": "function",
+    "location": "numerology/scripts/numerology_cli.py:50",
+    "fingerprint": "27476dca284f84c2",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.function.normalize_name",
+    "engine": "numerology",
+    "kind": "function",
+    "location": "numerology/scripts/numerology_cli.py:56",
+    "fingerprint": "dbac88014f142525",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "姓名去声调（Unicode 规范化）",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.function.name_numbers",
+    "engine": "numerology",
+    "kind": "function",
+    "location": "numerology/scripts/numerology_cli.py:65",
+    "fingerprint": "8d13b320d5ddef6e",
+    "claim": "Expression = sum of all letters of the full birth name; soul urge = vowels; personality = consonants.",
+    "sources": [
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, glossary tr. 262: Expression, Heart's Desire (Soul Urge)",
+        "stance": "agree"
+      },
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, p. 233 (search excerpt): the Soul Urge is the sum of the vowels",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The Y rule has no source. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.function.birth_chart",
+    "engine": "numerology",
+    "kind": "function",
+    "location": "numerology/scripts/numerology_cli.py:78",
+    "fingerprint": "7c44278314c21102",
+    "claim": "Counts the digits 1–9 of the birth date (zeros dropped) onto the grid; an arrow is full when all 3 digits are present, empty when all 3 are missing.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, p. 52: an arrow is three numbers in a line or three empty squares in a line; pp. 53–78 examples",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "13 golden cases match. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.function.pinnacles_and_challenges",
+    "engine": "numerology",
+    "kind": "function",
+    "location": "numerology/scripts/numerology_cli.py:93",
+    "fingerprint": "c63642e63b60c744",
+    "claim": "Pinnacle values: month+day, day+year, P1+P2, month+year; challenges: |month−day|, |day−year|, |C1−C2|, |month−year|. Age of pinnacle 1: 36 − life path (reduced to 1–9; the phillips rule keeps 10 and 11).",
+    "sources": [
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, p. 220 (Figure 6.1) and glossary p. 262 (challenges 1, 4, main)",
+        "stance": "agree"
+      },
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, pp. 175, 177, 179 (search excerpts): first peak at age 36 − Ruling Number; age table for 10, 11, 22/4",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Values match Decoz's example of 29 May 1950. Phillips's ages apply only to the phillips rule; the vn/classic reduction 10→1, 11→2 has no source. Phillips treats peaks as points in time; the script still outputs age ranges. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.function.build_output",
+    "engine": "numerology",
+    "kind": "function",
+    "location": "numerology/scripts/numerology_cli.py:106",
+    "fingerprint": "07450882fca37610",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.ruleset.life_path_rule",
+    "engine": "numerology",
+    "kind": "ruleset",
+    "location": "numerology/scripts/numerology_cli.py:142",
+    "fingerprint": "9f1339378e6f941b",
+    "claim": "Describes the life path reduction rule.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, tr. 82–83",
+        "stance": "agree"
+      },
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, glossary tr. 262",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "See numerology.table.LIFE_PATH_RULES. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.ruleset.life_path_method",
+    "engine": "numerology",
+    "kind": "ruleset",
+    "location": "numerology/scripts/numerology_cli.py:143",
+    "fingerprint": "e091cc1c075d49c0",
+    "claim": "Describes the summing method.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, tr. 82",
+        "stance": "agree"
+      },
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, tr. 20–21",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "See numerology.table.LIFE_PATH_METHODS. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.ruleset.letter_values",
+    "engine": "numerology",
+    "kind": "ruleset",
+    "location": "numerology/scripts/numerology_cli.py:144",
+    "fingerprint": "3347e17d9e9f0928",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.ruleset.name_rule",
+    "engine": "numerology",
+    "kind": "ruleset",
+    "location": "numerology/scripts/numerology_cli.py:145",
+    "fingerprint": "4dac3f584ee0faeb",
+    "claim": "Describes how the name numbers are computed.",
+    "sources": [
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, glossary tr. 262",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The Y rule has no source. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.ruleset.birthday_rule",
+    "engine": "numerology",
+    "kind": "ruleset",
+    "location": "numerology/scripts/numerology_cli.py:146",
+    "fingerprint": "feb84566d5468f3f",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.ruleset.personal_year_rule",
+    "engine": "numerology",
+    "kind": "ruleset",
+    "location": "numerology/scripts/numerology_cli.py:147",
+    "fingerprint": "7af7c210152c6118",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.ruleset.pinnacle_rule",
+    "engine": "numerology",
+    "kind": "ruleset",
+    "location": "numerology/scripts/numerology_cli.py:148",
+    "fingerprint": "7ab3b0e3120d712c",
+    "claim": "Describes how pinnacles and challenges are computed.",
+    "sources": [
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, tr. 220, 262",
+        "stance": "agree"
+      },
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, pp. 177, 179 (search excerpts)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "See numerology.function.pinnacles_and_challenges. Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.ruleset.maturity_rule",
+    "engine": "numerology",
+    "kind": "ruleset",
+    "location": "numerology/scripts/numerology_cli.py:149",
+    "fingerprint": "de69a5199b8ad1de",
+    "claim": "Maturity number = life path reduced to 1–9 + expression, reduced keeping 11/22/33.",
+    "sources": [
+      {
+        "id": "decoz-numerology",
+        "locator": "Perigee 2001, glossary pp. 262–263: add Expression and Life Path, then reduce to a single digit",
+        "stance": "disagree"
+      }
+    ],
+    "verdict": "conflict",
+    "notes": "Decoz's glossary says reduce to a single digit; the code keeps 11/22/33 and reduces the life path before adding. Not changed: the glossary may be abbreviated; the main chapter on Maturity needs reading.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.ruleset.birth_chart_rule",
+    "engine": "numerology",
+    "kind": "ruleset",
+    "location": "numerology/scripts/numerology_cli.py:150",
+    "fingerprint": "6bd9d8c4f23c865d",
+    "claim": "Describes the birth chart.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, tr. 52–53",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Numerology has no T1/T2 source in the registry, so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.doc.SKILL.md",
+    "engine": "numerology",
+    "kind": "doc",
+    "location": "numerology/SKILL.md",
+    "fingerprint": "815fec295cb0e93f",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "numerology.doc.y-nghia-so.md",
+    "engine": "numerology",
+    "kind": "doc",
+    "location": "numerology/references/y-nghia-so.md",
+    "fingerprint": "432583d59e9a290c",
+    "claim": "Arrow names follow Phillips; numbers 10 and 33 are sourced; the strengths/challenges of each number are not checked.",
+    "sources": [
+      {
+        "id": "phillips-complete-numerology",
+        "locator": "Hay House 2005, chapter 6 pp. 51–79; pp. 82–83",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. (labelled in A2) The meaning of each number and the personal year still have no source: most of the Ruling Number chapter (pp. 84–117) have no preview.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.DEFAULT_RULESET",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:24",
+    "fingerprint": "29eb5ac78252beca",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.DEFAULT_TIMEZONE",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:25",
+    "fingerprint": "87af758f5b13e6e9",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.CHINA_NAMES",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:26",
+    "fingerprint": "91dfc24c4954e8b5",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.JIAZI",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:28",
+    "fingerprint": "2f00333321b8724d",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.YANG_TERMS",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:37",
+    "fingerprint": "388c13814b585b4b",
+    "claim": "Yang dun from 冬至 to 芒种, yin dun from 夏至 to 大雪.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 八节 / 八卦定图; 卷一 超接诀 (芒种节后是夏至…大雪之后是冬至)",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷1: 冬至十二氣…為陽遁九局，夏至十二氣…為隂遁九局",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.JU_TABLE",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:42",
+    "fingerprint": "e10855c23e787534",
+    "claim": "Upper/middle/lower yuan ju numbers for the 24 solar terms.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷一 阴阳二遁顺逆起例: 冬至惊蜇一七四，夏至白露九三六…立冬寒露六九三 (compared automatically, 24/24)",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷2: examples 陽遁上元一局, 隂遁上元九局 (indirect)",
+        "stance": "partial"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The ju-number verse was readable only in 統宗; 遁甲演義 has examples but not the verse. The Wikisource copy of 煙波釣叟歌 lacks this line.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.EARTH_STEM_ORDER",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:73",
+    "fingerprint": "9ab5176eec9d0cc0",
+    "claim": "Earth plate: yang dun places the six yi forward and the three qi backward; yin dun the reverse.",
+    "sources": [
+      {
+        "id": "yanbo-diaosou-ge",
+        "locator": "陽遁順儀奇逆布，陰遁逆儀奇順行",
+        "stance": "agree"
+      },
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 阳遁 / 阴遁: examples for ju 1 and ju 9",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.ROTATION_RING",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:79",
+    "fingerprint": "b4c87d6c2473214c",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.STAR_RING",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:83",
+    "fingerprint": "9f3c3eff3eafdaa4",
+    "claim": "Nine stars and home palaces: 蓬1 任8 冲3 辅4 英9 芮2 柱7 心6, 禽5.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 九星; 卷一 九星值符图",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷1 時家竒門 (陽遁一局: 坎天蓬, 坤天芮, 震天沖, 巽天輔, 五天禽, 乾天心); 卷3 (艮任, 離英)",
+        "stance": "partial"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "8 of the 9 stars have two sources; 天柱 in palace 7 appears only in 統宗.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.DOOR_RING",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:86",
+    "fingerprint": "13cd6dc932c2a0c5",
+    "claim": "Eight doors and home palaces: 休1 生8 伤3 杜4 景9 死2 惊7 开6.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 八门: 坎休、艮生、震伤、巽杜、离景、坤死、兑惊、乾开; 卷一 八门值使图",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷1 時家竒門: 休 (坎), 死 (坤, 五), 傷 (震), 杜 (巽), 開 (乾)",
+        "stance": "partial"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "生, 景, 驚 appear only in 統宗.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.STAR_HOME",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:89",
+    "fingerprint": "46169d94a1146115",
+    "claim": "Xem qimen.table.STAR_RING.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 九星; 卷一 九星值符图",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷1 時家竒門 (陽遁一局: 坎天蓬, 坤天芮, 震天沖, 巽天輔, 五天禽, 乾天心); 卷3 (艮任, 離英)",
+        "stance": "partial"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "8 of the 9 stars have two sources; 天柱 in palace 7 appears only in 統宗.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.DOOR_HOME",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:90",
+    "fingerprint": "372047defbc374fd",
+    "claim": "Xem qimen.table.DOOR_RING.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷一 八门值使图",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The full list appears only in 統宗.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.OPPOSITE_PALACE",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:91",
+    "fingerprint": "31854f4e3abfb7e1",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.GOD_RING_YANG",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:95",
+    "fingerprint": "a2ed64d19993314f",
+    "claim": "Eight gods, yang dun: 值符, 螣蛇, 太阴, 六合, 白虎 (勾陈), 玄武 (朱雀), 九地, 九天.",
+    "sources": [
+      {
+        "id": "yanbo-diaosou-ge",
+        "locator": "值符前三六合位，太陰之神在前二。後一宮中為九天，後二之神為九地",
+        "stance": "agree"
+      },
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 八神: 一值符、二腾蛇、三太阴、四六合、五勾陈、六朱雀、七九地、八九天（朱雀下有玄武，勾陈下又白虎）",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷2 例 陽遁上元一局",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The positions of 值符, 太陰, 六合, 九天, 九地 have two sources (煙波 or 遁甲演義 卷2, plus 統宗); 遁甲演義 copies 煙波, so its examples only illustrate the same rule. 螣蛇 and positions 5 and 6 appear only in 統宗, which names them 勾陈/朱雀, with 白虎/玄武 only as alternate names (the code uses the alternates).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.GOD_RING_YIN",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:96",
+    "fingerprint": "69219facd10a21c4",
+    "claim": "Eight gods, yin dun: 值符, 九天, 九地, 玄武 (朱雀), 白虎 (勾陈), 六合, 太阴, 螣蛇 (in ROTATION_RING order).",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 八神: 阴遁则一值符、二九天、三九地、四朱雀、五勾陈、六六合、七太阴、八腾蛇",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷2 例 隂遁上元九局: 前一九天, 前二九地, 後二太隂, 後三六合",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The positions of 值符, 太陰, 六合, 九天, 九地 have two sources (煙波 or 遁甲演義 卷2, plus 統宗); 遁甲演義 copies 煙波, so its examples only illustrate the same rule. 螣蛇 and positions 5 and 6 appear only in 統宗, which names them 勾陈/朱雀, with 白虎/玄武 only as alternate names (the code uses the alternates).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.XUNSHOU_TO_HIDDEN_YI",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:98",
+    "fingerprint": "124de4ba318f3742",
+    "claim": "The six jia hidden under the six yi: 甲子戊, 甲戌己, 甲申庚, 甲午辛, 甲辰壬, 甲寅癸.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 六仪: 甲子遁于六戊…甲寅遁于六癸",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷3: 甲子戊在坤 甲戌己在震 甲申庚在巽 甲午辛… 甲辰壬… 甲寅癸…",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.BRANCH_TO_PALACE",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:107",
+    "fingerprint": "cbcd38f33ee4274c",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.PALACE_INFO",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:122",
+    "fingerprint": "399b28748f096f8f",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.GRID_ORDER",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:134",
+    "fingerprint": "0958d1a55671725b",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.YIMA_TABLE",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:138",
+    "fingerprint": "79d0a70f04917a79",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.STEM_ELEMENT",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:146",
+    "fingerprint": "c3b333e242f3ed01",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.WUXING_SHENG",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:157",
+    "fingerprint": "eb5bb30906b776eb",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.WUXING_KE",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:158",
+    "fingerprint": "003f7866d81ffbdf",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.STAR_ELEMENT",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:161",
+    "fingerprint": "ef995699d1a7c319",
+    "claim": "Elements of the nine stars by home palace.",
+    "sources": [
+      {
+        "id": "yanbo-diaosou-ge",
+        "locator": "坎蓬水星離英火，中宮坤艮土為營，乾兌為金震巽木",
+        "stance": "agree"
+      },
+      {
+        "id": "qimen-tongzong",
+        "locator": "九星值符图: 天辅巽四木, 天英离九火, 天芮坤二土…",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.DOOR_ELEMENT",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:168",
+    "fingerprint": "31399fefdf5f9017",
+    "claim": "Elements of the eight doors by home palace.",
+    "sources": [
+      {
+        "id": "yanbo-diaosou-ge",
+        "locator": "elements of the palaces (坎水 離火 坤艮土 乾兌金 震巽木)",
+        "stance": "agree"
+      },
+      {
+        "id": "qimen-tongzong",
+        "locator": "八门: home palace of each door",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Inferred from the home palace; neither source states each door's element.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.SAN_QI",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:174",
+    "fingerprint": "f0bb9b0d73c89262",
+    "claim": "Three qi: 乙丙丁.",
+    "sources": [
+      {
+        "id": "yanbo-diaosou-ge",
+        "locator": "三奇即是乙丙丁",
+        "stance": "agree"
+      },
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷一 三奇六仪",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.table.JI_MEN",
+    "engine": "qimen",
+    "kind": "table",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:176",
+    "fingerprint": "21f85bf76e9fa6e1",
+    "claim": "Auspicious doors: 开, 休, 生.",
+    "sources": [
+      {
+        "id": "yanbo-diaosou-ge",
+        "locator": "八門若遇開休生，諸事逢之總趁情",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷2 (copies the same line from 煙波)",
+        "stance": "partial"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "遁甲演義 only copies 煙波, so it does not count as an independent source.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.get_timezone",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:179",
+    "fingerprint": "6ff2b4a84a12c45d",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "时区名称解析",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.NormalizedInput",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:191",
+    "fingerprint": "1d1e939b8dde8224",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.rotate_to_start",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:208",
+    "fingerprint": "a016dcc6b0163b41",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.resolve_timezone",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:213",
+    "fingerprint": "42b6d7cbd3f24b2a",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "时区字段默认值",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.normalize_input",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:227",
+    "fingerprint": "c879242e8f320d1e",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "输入解析与校验",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.build_solar_and_lunar",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:303",
+    "fingerprint": "4cc41dbe2d4939fb",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.active_jie",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:316",
+    "fingerprint": "a2b4fa2b19c8fde7",
+    "claim": "The solar term used to set the ju is the term just before the time of casting (the 拆補 method).",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷一 论超接之法 / 又法 (符头先到则从符头而行节气之先上元) / 超接诀 / 置闰法",
+        "stance": "disagree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷1 超神接氣置閏訣: 拆補之局永為下之殘局…上局永無拆補借用之理",
+        "stance": "disagree"
+      }
+    ],
+    "verdict": "conflict",
+    "notes": "Both 統宗 and 遁甲演義 teach 超神接氣置閏 (by fu tou). 遁甲演義 uses 拆補 as part of the 'jie qi' step and rejects using 拆補 on its own. The code is in fact standalone 拆補: active_jie takes the term just before the casting time and compute_yuan works by day (qimen_cli.py lines 316–327). The two methods give different ju when the fu tou and the solar term fall apart. Not changed: needs a decision on the default school or a parameter. Decision 2026-11-23: keep 拆補 as the default; ruleset.ju_rule and SKILL.md state the difference (SKILL.md previously said 置闰 by mistake).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.compute_yuan",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:325",
+    "fingerprint": "c4f8f1987ee9db7a",
+    "claim": "Three yuan by the fu tou 甲/己: on 子午卯酉 it is upper, 寅申巳亥 middle, 辰戌丑未 lower; each yuan lasts 5 days.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 定三元法: 符头所临之支值子午卯酉则为上元；值寅申巳亥则为中元",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷1 閏訣: 甲己二日號符頭，子午夘酉為上列，寅申巳亥配中元，辰戌丑未下元",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.compute_earth_plate",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:330",
+    "fingerprint": "362ca6bf9f51e457",
+    "claim": "Lays out the earth plate from the ju palace.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 阳遁 / 阴遁 (一局, 九局)",
+        "stance": "agree"
+      },
+      {
+        "id": "yanbo-diaosou-ge",
+        "locator": "陽遁順儀奇逆布",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.find_stem_palace",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:337",
+    "fingerprint": "da4f4cdea77f1ac4",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.hosted_palace",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:344",
+    "fingerprint": "65e3eb095693ded3",
+    "claim": "The center palace 5 lodges with Kun 2 (both dun).",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 九星: 天禽阳遁阴遁俱寄坤宫，一本阳遁寄坤宫阴遁寄艮宫",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷1 時家竒門: 陽遁一局 甲辰在五天禽為直符死門為直使 (yang dun only)",
+        "stance": "partial"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Lodging with Kun in yang dun has two sources; yin dun only 統宗, which also records a variant lodging with Gen. 遁甲演義 卷2 puts the zhifu 'in palace 5' in its example; the code uses palace 2.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.hosting_note",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:348",
+    "fingerprint": "03d68107c0b6643f",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.split_branch_pair",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:360",
+    "fingerprint": "868ae436b006eb92",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.compute_yima",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:364",
+    "fingerprint": "0bf2921f6eb38be4",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.compute_zhishi_palace",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:372",
+    "fingerprint": "41e850fd47ffcea4",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.compute_stem_relation",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:382",
+    "fingerprint": "83a2d73d74e31bbd",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.find_gan_palace",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:403",
+    "fingerprint": "6d5fb9c64baac11b",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.compute_element_relation",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:411",
+    "fingerprint": "56659f22cc51ccc1",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.detect_patterns",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:428",
+    "fingerprint": "8aa0175b8547a4fe",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.build_chart",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:513",
+    "fingerprint": "9dcd7d19441289c3",
+    "claim": "Builds the chart: zhifu by xun shou, zhifu to the hour stem, zhishi, eight gods.",
+    "sources": [
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷2: 3 examples (陽遁七局, 陽遁上元一局, 隂遁上元九局)",
+        "stance": "agree"
+      },
+      {
+        "id": "yanbo-diaosou-ge",
+        "locator": "值符常遣加時干，值使順逆遁宮去",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "3 golden cases match. The patterns (detect_patterns) have not been checked one by one.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.function.build_output",
+    "engine": "qimen",
+    "kind": "function",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:735",
+    "fingerprint": "661bb99eb0e72c57",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.ruleset.timezone_default",
+    "engine": "qimen",
+    "kind": "ruleset",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:789",
+    "fingerprint": "af7c5973bdce8163",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.ruleset.time_rule",
+    "engine": "qimen",
+    "kind": "ruleset",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:790",
+    "fingerprint": "63e3c83aa768d027",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.ruleset.dun_type_rule",
+    "engine": "qimen",
+    "kind": "ruleset",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:791",
+    "fingerprint": "2f7c9c40d68ed851",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.ruleset.late_zi_rule",
+    "engine": "qimen",
+    "kind": "ruleset",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:792",
+    "fingerprint": "f667aa09f7c8ecb8",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.ruleset.yuan_rule",
+    "engine": "qimen",
+    "kind": "ruleset",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:793",
+    "fingerprint": "af973a984743dc9e",
+    "claim": "Describes how the three yuan are set.",
+    "sources": [
+      {
+        "id": "qimen-tongzong",
+        "locator": "卷二 定三元法: 符头所临之支值子午卯酉则为上元；值寅申巳亥则为中元",
+        "stance": "agree"
+      },
+      {
+        "id": "dunjia-yanyi",
+        "locator": "卷1 閏訣: 甲己二日號符頭，子午夘酉為上列，寅申巳亥配中元，辰戌丑未下元",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "confirmed",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.ruleset.ju_rule",
+    "engine": "qimen",
+    "kind": "ruleset",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:794",
+    "fingerprint": "7e5303d66816d315",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.ruleset.zhifu_zhishi_rule",
+    "engine": "qimen",
+    "kind": "ruleset",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:795",
+    "fingerprint": "952c33084630294b",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.ruleset.center_hosting_rule",
+    "engine": "qimen",
+    "kind": "ruleset",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:796",
+    "fingerprint": "5396601e6382fbbf",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.ruleset.yima_rule",
+    "engine": "qimen",
+    "kind": "ruleset",
+    "location": "qimen-dunjia/scripts/qimen_cli.py:797",
+    "fingerprint": "0aea5cd3baaaafd0",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.doc.SKILL.md",
+    "engine": "qimen",
+    "kind": "doc",
+    "location": "qimen-dunjia/SKILL.md",
+    "fingerprint": "bf3bad53919c7ff2",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.doc.examples.md",
+    "engine": "qimen",
+    "kind": "doc",
+    "location": "qimen-dunjia/references/examples.md",
+    "fingerprint": "1c2a47a305c8573b",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "Process document written by the project; contains no divination rules that need sources; noted at the top of the file (A7).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.doc.geju.md",
+    "engine": "qimen",
+    "kind": "doc",
+    "location": "qimen-dunjia/references/geju.md",
+    "fingerprint": "5045a6c14dbbf554",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. Definitions of men po, fanyin/fuyin and three qi with auspicious doors are sourced (煙波); the plain-language explanations are not.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.doc.interview.md",
+    "engine": "qimen",
+    "kind": "doc",
+    "location": "qimen-dunjia/references/interview.md",
+    "fingerprint": "f59d1638379d7ec1",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "Process document written by the project; contains no divination rules that need sources; noted at the top of the file (A7).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.doc.ruleset-mainline.md",
+    "engine": "qimen",
+    "kind": "doc",
+    "location": "qimen-dunjia/references/ruleset-mainline.md",
+    "fingerprint": "a8aa7c4289b0c644",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. States the 拆補 conflict with 統宗/遁甲演義.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.doc.thuat-ngu-vi.md",
+    "engine": "qimen",
+    "kind": "doc",
+    "location": "qimen-dunjia/references/thuat-ngu-vi.md",
+    "fingerprint": "492b4a2cb0c9dc50",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "Sino-Vietnamese glossary, not an interpretive claim (A7). Sino-Vietnamese readings not checked against a dictionary.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "qimen.doc.yongshen.md",
+    "engine": "qimen",
+    "kind": "doc",
+    "location": "qimen-dunjia/references/yongshen.md",
+    "fingerprint": "2264c34d4eeab6a6",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. The whole file is unsourced.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.DEFAULT_RULESET",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:30",
+    "fingerprint": "b034f6b99a51d342",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.STEMS",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:32",
+    "fingerprint": "40334037eb7a0cf9",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.BRANCHES",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:34",
+    "fingerprint": "ac9ef8bb8bd12ff0",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.YIN",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:35",
+    "fingerprint": "a268c477f595c12c",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.PALACE_NAMES",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:37",
+    "fingerprint": "42318b968c1ca944",
+    "claim": "The 12 palaces run backward from the Life palace.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安十二宫例: 男女俱从逆转",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The book says 妻妾, 奴仆; the code says 夫妻, 交友. Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.STEM_NUMBER",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:43",
+    "fingerprint": "8f4c89f2592d054e",
+    "claim": "Sets the bureau by stem number + branch number, equivalent to the nayin of the Life palace's stem-branch.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 六十花甲子纳音歌; 丙寅丁卯炉中火…火局",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Script compared the 58 of 60 stem-branches readable in the nayin verse: the numeric bureau matches the nayin element. Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.BRANCH_NUMBER",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:44",
+    "fingerprint": "99ce52862efe8c84",
+    "claim": "Xem ziwei.table.STEM_NUMBER.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 六十花甲子纳音歌",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.JU_BY_REMAINDER",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:49",
+    "fingerprint": "b04d737d61917b63",
+    "claim": "Xem ziwei.table.STEM_NUMBER.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 六十花甲子纳音歌",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.YIN_STEM_BY_YEAR_STEM",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:52",
+    "fingerprint": "5098a074f510d7d0",
+    "claim": "Stem of the 寅 palace by year stem (甲己 丙寅…戊癸 甲寅).",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 起五行寅例",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.ZIWEI_GROUP_OFFSETS",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:55",
+    "fingerprint": "b3ae95aba9b694f7",
+    "claim": "From 紫微 backward: 天机 −1, 太阳 −3, 武曲 −4, 天同 −5, 廉贞 −8.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安南北斗诸星诀: 紫微天机逆行旁，隔一阳武天同当，又隔二位廉贞地",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.TIANFU_GROUP_OFFSETS",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:57",
+    "fingerprint": "130984f2cf978191",
+    "claim": "From 天府 forward: 太阴 +1 … 七杀 +6, 破军 +10.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安南北斗诸星诀: 天府太阴与贪狼…七杀空三破军位，八星顺数",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.MAJOR_STARS",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:61",
+    "fingerprint": "415a2f62e18665f1",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.KUI_YUE",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:64",
+    "fingerprint": "841ce1082940c2a9",
+    "claim": "Kui/Yue: 甲戊庚 丑未, 乙己 子申, 丙丁 亥酉, 辛 午寅, 壬癸 卯巳.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安天魁天钺诀: 甲戊庚牛羊，乙己鼠猴乡，六辛逢虎马，壬癸兔蛇藏，丙丁猪狗位",
+        "stance": "partial"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The Wikisource copy says 丙丁猪狗 (亥戌), the code 亥酉 (猪鸡); it says 六辛逢虎马 (the reverse of the code's 魁午钺寅). Possibly a transcription error or a variant; a printed edition is needed to decide.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.LUCUN",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:72",
+    "fingerprint": "b535794c5b559153",
+    "claim": "Lucun by year stem.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安禄存星诀",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.SANHE_GROUP",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:75",
+    "fingerprint": "9e88c3a00eac5a4f",
+    "claim": "San he group of the year branch.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安天马星诀; 安火铃二星诀",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.HUO_START",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:81",
+    "fingerprint": "0650e04d973e1f26",
+    "claim": "Starting point of Huoxing by the year branch's san he group.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安火铃二星诀: 寅午戌人丑卯方…",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The book gives only the starting point, not the direction of counting by hour (the code counts forward). Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.LING_START",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:82",
+    "fingerprint": "8c8a9d502df7e32a",
+    "claim": "Starting point of Lingxing by the year branch's san he group.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安火铃二星诀",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The book gives only the starting point, not the direction of counting by hour (the code counts forward). Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.TIANMA",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:83",
+    "fingerprint": "09ee2583fa2ebbf4",
+    "claim": "Tianma by the year branch's san he group.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安天马星诀",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.SIHUA_TYPES",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:86",
+    "fingerprint": "680e3f8dd1b20a26",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.SIHUA",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:87",
+    "fingerprint": "4bc4e7a6694748f5",
+    "claim": "Four transformations by year stem; Ren years have two variants, selected by sihua_rule (default zuofu: 左辅 takes hua ke; quanshu: 天府 takes hua ke).",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安禄权科忌四星变化诀 (…壬梁紫府武…)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Decision 2026-11-23: keep 左辅 as the default (matches iztro and common apps) and add sihua_rule=quanshu per 全書. The 左辅 side has no book source in the registry, so it cannot be recorded as variant yet. Golden case quanshu-ren-sihua.",
+    "tests": [
+      "ziwei-doushu/scripts/tests/test_ziwei_cli.py::TestSihuaRule",
+      "audit/tests/test_golden_cases.py"
+    ],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.DEFAULT_SIHUA_RULE",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:100",
+    "fingerprint": "37d41736cdaecf6b",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.SIHUA_RULES",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:101",
+    "fingerprint": "97d372b01c4e1578",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.SIHUA_RULE_TEXT",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:102",
+    "fingerprint": "1e316c1e25fd9bea",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.BRIGHTNESS",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:108",
+    "fingerprint": "e5e72b2f83d707fe",
+    "claim": "Brightness of the 14 major stars in the 12 palaces.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: the table 庙 旺 得地 利益 平和 不得地 落陷 (end of 安身命例)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Script compared all 168/168 cells: they match. Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.MING_ZHU",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:127",
+    "fingerprint": "a14db80231de364a",
+    "claim": "Life lord by the Life palace branch.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安命主",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.SHEN_ZHU",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:128",
+    "fingerprint": "c01bd1ab90f3765c",
+    "claim": "Body lord by the year branch.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安身主 (子午人火铃星 → code 火星)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.ZIWEI_PAIR_BRANCHES",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:131",
+    "fingerprint": "815c1d16d7b2e071",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.DEFAULT_LEAP_MONTH_RULE",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:139",
+    "fingerprint": "8a41c42982aca5b9",
+    "claim": "Default split_15.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: the whole leap month counts as the next month",
+        "stance": "disagree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "全書 uses 'next'; there is no source for split_15. Changing the default is the user's decision. Decision 2026-11-23: keep split_15 (common in modern software); SKILL.md and the user guide state that 全書 uses next.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.LEAP_MONTH_RULES",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:140",
+    "fingerprint": "b73fa9728d8ff648",
+    "claim": "Three ways to handle the leap month.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 若闰月正月生者要在二月内起安身命，凡有闰月具要依此为例 (the whole leap month counts as the next month)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "全書 supports 'next'. The code's split_15 default has no book source.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.LATE_ZI_RULES",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:145",
+    "fingerprint": "f6ce86a78733d05e",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.table.MISSING_TIME",
+    "engine": "ziwei",
+    "kind": "table",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:150",
+    "fingerprint": "ac6ff5b11440257d",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "提示文字",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.BirthInfo",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:154",
+    "fingerprint": "09fa28b67f1c5c14",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.b",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:171",
+    "fingerprint": "a586be5b01906e82",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.wrap",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:175",
+    "fingerprint": "00b3e5658123974f",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.normalize_input",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:179",
+    "fingerprint": "9865f7ce18c39d48",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "输入解析与校验",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.hour_branch_index",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:250",
+    "fingerprint": "abef4e1a58f96b32",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.resolve_calendar",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:255",
+    "fingerprint": "bbbeb00ce92e2269",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.palace_stem",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:290",
+    "fingerprint": "45e259b48199c3ec",
+    "claim": "Palace stems continue from the 寅 palace in stem order.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 起五行寅例; example 甲生人安命在寅…丙寅",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.wuxing_ju",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:296",
+    "fingerprint": "992da11345e4938c",
+    "claim": "Five-element bureau from the nayin of the Life palace's stem-branch.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 纳音歌; example 丙寅 炉中火 → 火局",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.ziwei_position",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:303",
+    "fingerprint": "b75c45d0ec2af6e7",
+    "claim": "Places 紫微 by bureau and birth day.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 正月初一生者是火局，酉宫起紫微",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one example checked so far (fire bureau, day 1 → 酉). Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.tianfu_position",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:315",
+    "fingerprint": "e9ba23fb89ea0014",
+    "claim": "天府 mirrors 紫微 across the 寅申 axis.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安天府图: 天府惟寅申二宫紫府同宫…如紫居丑则府居卯",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.place_major_stars",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:320",
+    "fingerprint": "e49221536cabd71a",
+    "claim": "Places the 14 major stars.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安南北斗诸星诀; 安天府图",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.place_minor_stars",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:327",
+    "fingerprint": "7f0ccb644241c233",
+    "claim": "昌曲 by hour, 輔弼 by month, 魁鉞, 祿存, 羊陀, 火鈴, 空劫, 天馬.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安文昌文曲星诀; 安左辅右弼星诀; 安擎羊陀罗二星诀; 天空地劫诀",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The book's examples match (golden cases quanshu-*). See ziwei.table.KUI_YUE. Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.place_adjective_stars",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:350",
+    "fingerprint": "df54b086e05b8874",
+    "claim": "天刑, 天姚, 红鸾, 天喜, 天哭, 天虚.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安天刑天姚星诀; 安天哭天虚星诀; 安红鸾天喜诀",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.sihua_for_stem",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:364",
+    "fingerprint": "76aafb9ec0e2f5d4",
+    "claim": "Assigns the four transformations to star positions.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安禄权科忌四星变化诀; example 甲生人廉贞化禄…",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Xem ziwei.table.SIHUA.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.decadal_direction",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:372",
+    "fingerprint": "33df740e9bac3579",
+    "claim": "Decade periods: yang male / yin female run forward, yin male / yang female run backward.",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安大限诀",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "The book starts 'from the palace before Life' (父母) when running forward and 'the palace after Life' (兄弟) when running backward; the code starts the first decade at the Life palace. Possibly a variant or a different reading; not changed. Only one book lineage (全書); iztro is software (T4), so nothing can be confirmed yet.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.build_chart",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:378",
+    "fingerprint": "17ce9c6a1e43a535",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.self_check",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:444",
+    "fingerprint": "eab3b4eb713c8492",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.build_horoscope",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:466",
+    "fingerprint": "b9028c27b8cc73a6",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.function.build_output",
+    "engine": "ziwei",
+    "kind": "function",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:503",
+    "fingerprint": "14272c127c2c2e8e",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.ruleset.year_rule",
+    "engine": "ziwei",
+    "kind": "ruleset",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:547",
+    "fingerprint": "0069a84b382bbf79",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.ruleset.calendar_locale",
+    "engine": "ziwei",
+    "kind": "ruleset",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:548",
+    "fingerprint": "673d0becae9d8707",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.ruleset.late_zi_rule",
+    "engine": "ziwei",
+    "kind": "ruleset",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:549",
+    "fingerprint": "12d389f9526a1b12",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.ruleset.leap_month_rule",
+    "engine": "ziwei",
+    "kind": "ruleset",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:550",
+    "fingerprint": "cc1a4e34f0c19d2c",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.ruleset.sihua_rule",
+    "engine": "ziwei",
+    "kind": "ruleset",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:556",
+    "fingerprint": "24602509fb901c4e",
+    "claim": "Describes how the Ren-year hua ke is chosen (zuofu: 左辅; quanshu: 天府 per 全書).",
+    "sources": [
+      {
+        "id": "ziwei-quanshu",
+        "locator": "卷二 安身命例: 安禄权科忌四星变化诀 (壬梁紫府武)",
+        "stance": "agree"
+      }
+    ],
+    "verdict": "unverified",
+    "notes": "Xem ziwei.table.SIHUA.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.ruleset.age_rule",
+    "engine": "ziwei",
+    "kind": "ruleset",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:557",
+    "fingerprint": "4360f37712f3aad4",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.ruleset.time_rule",
+    "engine": "ziwei",
+    "kind": "ruleset",
+    "location": "ziwei-doushu/scripts/ziwei_cli.py:558",
+    "fingerprint": "4157f20630afb34f",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.doc.SKILL.md",
+    "engine": "ziwei",
+    "kind": "doc",
+    "location": "ziwei-doushu/SKILL.md",
+    "fingerprint": "aeb0cfe81440fdf3",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.doc.calculation.md",
+    "engine": "ziwei",
+    "kind": "doc",
+    "location": "ziwei-doushu/references/calculation.md",
+    "fingerprint": "146661c92bfa92c7",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. Star-placement sections point to 全書 卷二 and the differences recorded in A5.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.doc.patterns.md",
+    "engine": "ziwei",
+    "kind": "doc",
+    "location": "ziwei-doushu/references/patterns.md",
+    "fingerprint": "eeb869215f759b99",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. 12 of 18 patterns have a passage in 全書 (partial or full); 6 are unsourced.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.doc.sihua.md",
+    "engine": "ziwei",
+    "kind": "doc",
+    "location": "ziwei-doushu/references/sihua.md",
+    "fingerprint": "5b0dcff438ecb475",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. Transformations entering palaces, period transformations and flying stars: unsourced (modern techniques).",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.doc.stars.md",
+    "engine": "ziwei",
+    "kind": "doc",
+    "location": "ziwei-doushu/references/stars.md",
+    "fingerprint": "1d06a5d86fa7258a",
+    "claim": "",
+    "sources": [],
+    "verdict": "unverified",
+    "notes": "A7 (2026-11-23): every section is labelled 出处 (sourced / 部分 / 未核对古籍); SKILL.md tells the model to say when material is unsourced. The labels come from manual comparison; no subject-matter expert has reviewed them. Finding: the 北斗/南斗 labels in the overview table differ from 全書 (天機, 天同… belong to 南斗); noted, group names not changed.",
+    "tests": [],
+    "stale": false
+  },
+  {
+    "id": "ziwei.doc.thuat-ngu-vi.md",
+    "engine": "ziwei",
+    "kind": "doc",
+    "location": "ziwei-doushu/references/thuat-ngu-vi.md",
+    "fingerprint": "cefd64f0bf5a63f5",
+    "claim": "",
+    "sources": [],
+    "verdict": "not_applicable",
+    "notes": "Sino-Vietnamese glossary, not an interpretive claim (A7). Sino-Vietnamese readings not checked against a dictionary.",
+    "tests": [],
+    "stale": false
+  }
+]

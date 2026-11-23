@@ -337,6 +337,30 @@ def test_horoscope_layers():
     assert [s["star"] for s in h["yearly"]["sihua"]] == list(z.SIHUA["丙"])
 
 
+class TestSihuaRule:
+    """壬干化科：默认左辅（iztro 等现代通行）；sihua_rule=quanshu 按《紫微斗數全書》卷二「壬梁紫府武」取天府。"""
+
+    def test_default_ren_year_uses_zuofu(self):
+        out = run("1992-08-16 14:30")  # 壬申年
+        assert [s["star"] for s in out["chart"]["year_sihua"]] == ["天梁", "紫微", "左辅", "武曲"]
+        assert out["ruleset"]["sihua_rule"]["id"] == "zuofu"
+
+    def test_quanshu_rule_uses_tianfu_everywhere(self):
+        out = run("1992-08-16 14:30", sihua_rule="quanshu", query_year=2032)  # 2032 壬子流年
+        assert [s["star"] for s in out["chart"]["year_sihua"]] == ["天梁", "紫微", "天府", "武曲"]
+        assert out["horoscope"]["yearly"]["sihua"][2]["star"] == "天府"
+        assert out["ruleset"]["sihua_rule"]["id"] == "quanshu"
+
+    def test_other_stems_unchanged(self):
+        for stem in STEMS:
+            if stem != "壬":
+                assert z.SIHUA_RULES["quanshu"][stem] == z.SIHUA_RULES["zuofu"][stem]
+
+    def test_rejects_unknown_rule(self):
+        with pytest.raises(ValueError, match="sihua_rule"):
+            run("1992-08-16 14:30", sihua_rule="x")
+
+
 # ============================================================
 # 4. 与独立实现 iztro 2.6.2 逐星对照
 # ============================================================
@@ -487,3 +511,39 @@ def test_cli_roundtrip(tmp_path):
     src.write_text(json.dumps({"calendar_type": "solar", "birth_time": "2000-08-16 14:30"}), encoding="utf-8")
     assert z.main() == 1
     assert "gender" in json.loads(dst.read_text(encoding="utf-8"))["error"]
+
+
+def test_true_solar_time_moves_hour_branch():
+    # 乌鲁木齐东经 87.6°：北京时间 10:30 约为真太阳时 08:32，巳时变辰时
+    payload = {"calendar_type": "solar", "birth_time": "1990-12-01 10:30", "gender": "男"}
+    assert build_output(payload)["calendar"]["hour_branch"] == "巳时"
+    output = build_output({**payload, "true_solar_time": True, "location": {"longitude": 87.6}})
+    assert output["calendar"]["hour_branch"] == "辰时"
+    assert output["normalized_input"]["civil_solar_datetime"] == "1990-12-01 10:30"
+    assert output["normalized_input"]["true_solar_time"]["longitude"] == 87.6
+
+
+def test_vn_calendar_changes_lunar_year_and_chart():
+    # 1985-01-25：越南已是乙丑年正月初五，中国仍是甲子年十二月初五
+    payload = {"calendar_type": "solar", "birth_time": "1985-01-25 10:00", "gender": "男"}
+    cn, vn = build_output(payload), build_output({**payload, "calendar_locale": "vn"})
+    assert (cn["calendar"]["year_ganzhi"], cn["calendar"]["lunar_month"]) == ("甲子", 12)
+    assert (vn["calendar"]["year_ganzhi"], vn["calendar"]["lunar_month"], vn["calendar"]["lunar_day"]) == ("乙丑", 1, 5)
+    assert cn["chart"]["palaces"] != vn["chart"]["palaces"]
+    assert vn["normalized_input"]["calendar_locale"] == "vn"
+
+
+def test_vn_lunar_input():
+    # 越南乙丑年正月初一 = 公历 1985-01-21
+    output = build_output({"calendar_type": "lunar", "birth_time": "1985-01-01 10:00", "gender": "女", "calendar_locale": "vn"})
+    assert output["calendar"]["chart_solar_date"] == "1985-01-21"
+
+
+def test_vietnamese_glossary_covers_output_terms():
+    glossary = (Path(__file__).resolve().parents[2] / "references" / "thuat-ngu-vi.md").read_text(encoding="utf-8")
+    terms = set(z.PALACE_NAMES) | set(z.MAJOR_STARS) | {b for row in z.BRIGHTNESS.values() for b in row}
+    for month in range(1, 13):
+        output = build_output({"calendar_type": "solar", "birth_time": f"1990-{month:02d}-15 {month * 2 - 1:02d}:30", "gender": "男"})
+        terms |= set(output["chart"]["star_index"]) | {output["chart"]["wuxing_ju"]["name"]}
+        terms |= {s["sihua"] for p in output["chart"]["palaces"] for s in p["major_stars"] if s.get("sihua")}
+    assert [t for t in sorted(terms) if t not in glossary] == []

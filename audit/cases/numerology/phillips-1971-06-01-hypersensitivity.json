@@ -1,0 +1,12 @@
+{
+  "source": {
+    "id": "phillips-complete-numerology",
+    "locator": "Hay House 2005, p. 65: Arrow of Hypersensitivity (example birth 1971-06-01); Google Books preview, id xogGqJzowKYC; read from a search excerpt"
+  },
+  "input": {
+    "birth_date": "1971-06-01"
+  },
+  "expect": {
+    "birth_chart.arrows.4.status": "empty"
+  }
+}

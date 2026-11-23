@@ -1,0 +1,14 @@
+{
+  "source": {
+    "id": "phillips-complete-numerology",
+    "locator": "Hay House 2005, pp. 82–83, 179: 5/9/1949 = 37/10; p. 83: there is no Ruling Number 1; p. 179 (search excerpt): Ruling 10 reaches the first peak at age 26; Google Books preview, id xogGqJzowKYC"
+  },
+  "input": {
+    "birth_date": "1949-05-09",
+    "life_path_rule": "phillips"
+  },
+  "expect": {
+    "life_path.value": 10,
+    "pinnacles.0.end_age": 26
+  }
+}

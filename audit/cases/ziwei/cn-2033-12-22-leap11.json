@@ -1,0 +1,17 @@
+{
+  "source": {
+    "id": "hko-calendar-tables",
+    "locator": "T2033e.txt, line 2033/12/22: '11th Lunar Month' repeats (HKO does not write 'leap'; the leap month is inferred and matches ytliu0 examples.html Example 2)"
+  },
+  "input": {
+    "calendar_type": "solar",
+    "birth_time": "2033-12-22 12:00",
+    "gender": "男",
+    "calendar_locale": "cn"
+  },
+  "expect": {
+    "calendar.lunar_month": 11,
+    "calendar.lunar_day": 1,
+    "calendar.is_leap_month": true
+  }
+}

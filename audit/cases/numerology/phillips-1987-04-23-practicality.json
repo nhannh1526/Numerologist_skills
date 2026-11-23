@@ -1,0 +1,12 @@
+{
+  "source": {
+    "id": "phillips-complete-numerology",
+    "locator": "Hay House 2005, p. 67: Arrow of Practicality (example birth 1987-04-23); Google Books preview, id xogGqJzowKYC; read from a search excerpt"
+  },
+  "input": {
+    "birth_date": "1987-04-23"
+  },
+  "expect": {
+    "birth_chart.arrows.3.status": "full"
+  }
+}

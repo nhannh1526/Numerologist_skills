@@ -1,0 +1,14 @@
+{
+  "source": {
+    "id": "phillips-complete-numerology",
+    "locator": "Hay House 2005, p. 78: Arrow of Passivity (example birth 2000-01-01); Google Books preview, id xogGqJzowKYC"
+  },
+  "input": {
+    "birth_date": "2000-01-01"
+  },
+  "expect": {
+    "birth_chart.arrows.2.status": "empty",
+    "birth_chart.counts.1": 2,
+    "birth_chart.counts.2": 1
+  }
+}

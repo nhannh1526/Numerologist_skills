@@ -1,0 +1,12 @@
+{
+  "source": {
+    "id": "phillips-complete-numerology",
+    "locator": "Hay House 2005, pp. 69–70: Arrow of Disorder (example birth 2002-02-02); Google Books preview, id xogGqJzowKYC; p. 69 from a search excerpt; p. 70 discusses an empty Physical Plane"
+  },
+  "input": {
+    "birth_date": "2002-02-02"
+  },
+  "expect": {
+    "birth_chart.arrows.3.status": "empty"
+  }
+}

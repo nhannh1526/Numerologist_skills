@@ -1,16 +1,25 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import argparse
-import json
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 from typing import Any
 
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from lunar_python import Lunar, Solar
+from lunar_python import Solar
+from lunar_python.util import LunarUtil
+
+from calendar_core import (
+    CALENDAR_LOCALES,
+    apply_true_solar_time,
+    calendar_locale_warnings,
+    lunar_to_solar,
+    parse_calendar_locale,
+    parse_datetime_string,
+    run_cli,
+    solar_to_lunar,
+)
 
 DEFAULT_RULESET = "mainline-cn-v1"
 DEFAULT_TIMEZONE = "Asia/Shanghai"
@@ -189,6 +198,8 @@ class NormalizedInput:
     use_now: bool
     leap_month: bool
     solar_dt: datetime
+    calendar_locale: str
+    true_solar_time: dict[str, Any] | None
     lunar_input: dict[str, Any] | None
     original_time_input: Any
     warnings: list[str]
@@ -197,35 +208,6 @@ class NormalizedInput:
 def rotate_to_start(seq: list[Any], start: Any) -> list[Any]:
     idx = seq.index(start)
     return seq[idx:] + seq[:idx]
-
-
-def parse_datetime_string(value: str) -> dict[str, int]:
-    normalized = value.strip().replace("T", " ").replace("/", "-").replace("年", "-").replace("月", "-").replace("日", " ")
-    normalized = normalized.replace("时", ":").replace("點", ":").replace("点", ":").replace("分", "").replace("秒", "")
-    parts = normalized.split()
-    if not parts:
-        raise ValueError("time_input 不能为空")
-    date_part = parts[0]
-    date_bits = [int(bit) for bit in date_part.split("-") if bit]
-    if len(date_bits) != 3:
-        raise ValueError("日期格式需为 YYYY-MM-DD")
-    time_bits = [0, 0, 0]
-    if len(parts) > 1:
-        raw_time = parts[1]
-        tmp = [int(bit) for bit in raw_time.split(":") if bit]
-        if len(tmp) >= 2:
-            time_bits[0] = tmp[0]
-            time_bits[1] = tmp[1]
-        if len(tmp) >= 3:
-            time_bits[2] = tmp[2]
-    return {
-        "year": date_bits[0],
-        "month": date_bits[1],
-        "day": date_bits[2],
-        "hour": time_bits[0],
-        "minute": time_bits[1],
-        "second": time_bits[2],
-    }
 
 
 def resolve_timezone(location: dict[str, Any], warnings: list[str]) -> str:
@@ -252,6 +234,7 @@ def normalize_input(payload: dict[str, Any]) -> NormalizedInput:
         raise ValueError(f"无法识别时区 {timezone}: {exc}") from exc
 
     calendar_type = str(payload.get("calendar_type") or "solar").strip().lower()
+    locale = parse_calendar_locale(payload)
     original_time_input = payload.get("time_input")
     leap_month = False
     lunar_input: dict[str, Any] | None = None
@@ -289,21 +272,15 @@ def normalize_input(payload: dict[str, Any]) -> NormalizedInput:
             raw = parse_datetime_string(str(original_time_input))
             raw["is_leap_month"] = bool(payload.get("is_leap_month", False))
         leap_month = bool(raw.get("is_leap_month", False))
-        lunar_month = -raw["month"] if leap_month else raw["month"]
-        lunar_obj = Lunar.fromYmdHms(raw["year"], lunar_month, raw["day"], raw["hour"], raw["minute"], raw["second"])
-        solar_obj = lunar_obj.getSolar()
-        solar_dt = datetime(
-            solar_obj.getYear(),
-            solar_obj.getMonth(),
-            solar_obj.getDay(),
-            solar_obj.getHour(),
-            solar_obj.getMinute(),
-            solar_obj.getSecond(),
-            tzinfo=tz,
-        )
+        day = lunar_to_solar(raw["year"], raw["month"], raw["day"], leap_month, locale)
+        solar_dt = datetime(day.year, day.month, day.day, raw["hour"], raw["minute"], raw["second"], tzinfo=tz)
         lunar_input = raw
     else:
         raise ValueError(f"不支持的 calendar_type: {calendar_type}")
+
+    corrected, true_solar = apply_true_solar_time({**payload, "location": {**location, "timezone": timezone}}, solar_dt.replace(tzinfo=None))
+    solar_dt = corrected.replace(tzinfo=tz)
+    warnings += calendar_locale_warnings(locale, solar_dt.date())
 
     return NormalizedInput(
         question_type=str(payload.get("question_type") or "").strip(),
@@ -315,6 +292,8 @@ def normalize_input(payload: dict[str, Any]) -> NormalizedInput:
         use_now=use_now,
         leap_month=leap_month,
         solar_dt=solar_dt,
+        calendar_locale=locale,
+        true_solar_time=true_solar,
         lunar_input=lunar_input,
         original_time_input=original_time_input,
         warnings=warnings,
@@ -757,6 +736,7 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
     normalized = normalize_input(payload)
     solar, lunar = build_solar_and_lunar(normalized)
     chart = build_chart(normalized, solar, lunar)
+    local_lunar = solar_to_lunar(normalized.solar_dt.date(), normalized.calendar_locale)
 
     return {
         "normalized_input": {
@@ -769,6 +749,8 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
             "city": normalized.city,
             "used_now": normalized.use_now,
             "original_time_input": normalized.original_time_input,
+            "true_solar_time": normalized.true_solar_time,
+            "calendar_locale": normalized.calendar_locale,
         },
         "calendar": {
             "solar": {
@@ -776,12 +758,13 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
                 "timezone": normalized.timezone,
             },
             "lunar": {
-                "year": lunar.getYear(),
-                "month": abs(lunar.getMonth()),
-                "day": lunar.getDay(),
-                "month_text": lunar.getMonthInChinese(),
-                "day_text": lunar.getDayInChinese(),
-                "is_leap_month": lunar.getMonth() < 0,
+                "year": local_lunar.year,
+                "month": local_lunar.month,
+                "day": local_lunar.day,
+                "month_text": ("闰" if local_lunar.is_leap else "") + LunarUtil.MONTH[local_lunar.month],
+                "day_text": LunarUtil.DAY[local_lunar.day],
+                "is_leap_month": local_lunar.is_leap,
+                "calendar_locale": CALENDAR_LOCALES[normalized.calendar_locale],
             },
             "jieqi": {
                 "active_jie": chart["active_jie"],
@@ -804,9 +787,11 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
             "id": str(payload.get("ruleset") or DEFAULT_RULESET),
             "name": "时家转盘奇门（大陆默认）",
             "timezone_default": DEFAULT_TIMEZONE,
+            "time_rule": "按真太阳时起局（经度时差 + 均时差，见 normalized_input.true_solar_time）。" if normalized.true_solar_time else "按输入时区的钟表时间起局，未做真太阳时校正。",
             "dun_type_rule": "冬至到芒种用阳遁，夏至到大雪用阴遁，按当前所处二十四节气（含中气）判定。",
+            "late_zi_rule": "23:00 起换日，日干支取次日（与紫微斗数 late_zi_rule=next_day、八字默认口径一致）；calendar.lunar 的农历日期仅作显示，不换日。",
             "yuan_rule": "按日干支所在六十甲子序列，每 5 日一元，循环上元/中元/下元。",
-            "ju_rule": "按当前节气和三元，从固定定局表取局数。",
+            "ju_rule": "拆补法：按起局时刻所处节气和三元，从固定定局表（《奇门遁甲统宗》阴阳二遁顺逆起例）取局数。《统宗》《遁甲演义》用超神接气置闰，符头与节气错开的日子局数可能不同。",
             "zhifu_zhishi_rule": "值符随时干落宫；值使从旬首地盘宫起逐时沿九宫数序移宫（阳顺阴逆，中五寄坤），二者分别移宫。",
             "center_hosting_rule": "中宫地盘干寄坤；天禽与中干随天芮转到天芮所落之宫。",
             "yima_rule": "hour_yima 取时支三合局驿马，day_yima 取日支三合局驿马，分别输出。",
@@ -841,25 +826,7 @@ def build_output(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Compute a structured qimen dunjia chart payload.")
-    parser.add_argument("--input", required=True, help="Path to input JSON")
-    parser.add_argument("--output", required=True, help="Path to output JSON")
-    args = parser.parse_args()
-
-    input_path = Path(args.input)
-    output_path = Path(args.output)
-
-    try:
-        payload = json.loads(input_path.read_text(encoding="utf-8-sig"))
-        output = build_output(payload)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_path.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
-        return 0
-    except Exception as exc:
-        error_payload = {"error": str(exc)}
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_path.write_text(json.dumps(error_payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        return 1
+    return run_cli(build_output, "Compute a structured qimen dunjia chart payload.")
 
 
 if __name__ == "__main__":
